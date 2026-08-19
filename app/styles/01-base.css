@@ -305,5 +305,6 @@ strong {
 
 /* ── Glow Text ───────────────────────────── */
 .glow-text {
+  font-family: var(--font-helvetica), Helvetica, Arial, sans-serif;
   text-shadow: none;
 }
