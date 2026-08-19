@@ -93,7 +93,7 @@ export default function Home() {
                 className="glow-text"
                 style={{
                   fontSize: 'clamp(36px, 6.5vw, 84px)',
-                  fontWeight: 900,
+                  fontWeight: 600,
                   lineHeight: 0.98,
                   letterSpacing: '-0.03em',
                   color: '#fff',
