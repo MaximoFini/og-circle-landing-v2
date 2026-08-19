@@ -1,0 +1,117 @@
+/* ══════════════════════════════════════════
+   TRIAGE V2 — Horizontal strip
+══════════════════════════════════════════ */
+.triage-v2-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.triage-v2-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 720px) {
+  .triage-v2-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+.triage-v2-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 52px 44px 44px;
+  text-decoration: none;
+  color: inherit;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  transition: background 0.35s ease;
+}
+
+.triage-v2-col:last-child {
+  border-right: none;
+}
+
+@media (max-width: 720px) {
+  .triage-v2-col {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 36px 28px;
+  }
+
+  .triage-v2-col:last-child {
+    border-bottom: none;
+  }
+}
+
+.triage-v2-col:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.triage-v2-col:hover .triage-v2-bar {
+  transform: scaleX(1);
+}
+
+.triage-v2-col:hover .triage-v2-num {
+  color: rgba(217, 158, 0, 0.18);
+}
+
+.triage-v2-col:hover .triage-v2-cta {
+  color: var(--accent-from);
+  gap: 10px;
+}
+
+/* Ghost number top-right */
+.triage-v2-num {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.1);
+  transition: color 0.35s ease;
+  user-select: none;
+}
+
+.triage-v2-quote {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+
+.triage-v2-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* Worst-case legibility spot on the page: 12px uppercase + letter-spacing.
+     .46 on #050505 = 4.62:1. */
+  color: rgba(255, 255, 255, 0.46);
+  transition: color 0.3s ease, gap 0.3s ease;
+}
+
+/* Animated bottom bar */
+.triage-v2-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent-from), var(--accent-to));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}

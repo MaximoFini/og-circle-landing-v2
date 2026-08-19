@@ -1,0 +1,592 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   DEMO — calculadora portada del repo `vegroup` (commit 5bbca48, snapshot
+   2026-08-17), montada dentro de app/components/demo/*.jsx.
+
+   Todo va anidado bajo .vg-demo: el CSS original era global (:root + tags
+   sueltos) porque vivía en su propia SPA. Acá comparte página con el resto
+   del landing, así que cada selector se scopea para no chocar con clases
+   genéricas del sitio (.card, .btn, .field, .grid... ya existen o pueden
+   existir en otro lado).
+
+   Los componentes portados conservan sus class names originales sin tocar
+   (contrato con app/components/demo/**) — este archivo solo cambia a qué
+   apunta cada variable y qué selector la agarra.
+
+   Retema: el original era "papel" (crema/tinta/dorado, radius 0). Acá se
+   remapea a los tokens dark del landing (app/styles/01-base.css) en vez de
+   literales nuevos, para que un cambio de paleta del landing se propague
+   solo. --font/--serif/--mono también se alinean a las familias que ya usa
+   el resto del sitio (Inter cuerpo, Montserrat display, monoespaciada para
+   cifras/códigos) — no se suma una tercera familia tipo IBM Plex.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.vg-demo {
+  --paper: var(--surface-1);
+  --ink: var(--text-primary);
+  --soft: var(--text-secondary);
+  --rule: var(--glass-border);
+
+  --bg-elev: var(--surface-1);
+  --bg-card: var(--surface-1);
+  --bg-panel: var(--surface-2);
+  --border: var(--rule);
+  --border-soft: var(--glass-border);
+  --text: var(--ink);
+  --text-soft: var(--text-secondary);
+  --text-dim: var(--soft);
+  --text-faint: var(--text-muted);
+
+  --gold: var(--accent-from);
+  --gold-ink: var(--bg);
+  --gold-soft: var(--accent-05);
+  --gold-border: var(--accent-40);
+
+  /* Recalibrados para fondo oscuro: los originales (#2f7a46 / #b3402e)
+     estaban tuneados para crema y sobre --surface-1 quedan apagados.
+     Mismo criterio de contraste que ya documenta 01-base.css para
+     --text-muted (>=4.5:1 sobre #050505). */
+  --green: #4ade80;
+  --green-soft: rgba(74, 222, 128, 0.12);
+  --red: #f87171;
+  --red-soft: rgba(248, 113, 113, 0.12);
+
+  --radius: 10px;
+  --font: var(--font-inter), sans-serif;
+  --serif: var(--font-montserrat), sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.vg-demo ::selection {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+.vg-demo :focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ── Selector de régimen ────────────────────────────────── */
+.vg-demo .regime-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.vg-demo .regime-option {
+  padding: 18px 16px;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  text-align: center;
+}
+.vg-demo .regime-option:hover {
+  border-color: var(--ink);
+}
+.vg-demo .regime-option.active {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+  box-shadow: inset 0 0 0 1px var(--gold-border);
+}
+.vg-demo .regime-option__title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+.vg-demo .regime-option__desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--soft);
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+
+/* ── Cards ──────────────────────────────────────────────── */
+.vg-demo .card {
+  background: var(--paper);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.vg-demo .card + .card {
+  margin-top: 24px;
+}
+.vg-demo .card__title {
+  display: flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.vg-demo .card__subtitle {
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.vg-demo .section-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 10px;
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+
+/* ── Forms ──────────────────────────────────────────────── */
+.vg-demo label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--soft);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+}
+.vg-demo input,
+.vg-demo textarea,
+.vg-demo select {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 0.15s;
+}
+.vg-demo input::placeholder,
+.vg-demo textarea::placeholder {
+  color: var(--text-faint);
+}
+.vg-demo input:focus,
+.vg-demo textarea:focus,
+.vg-demo select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.vg-demo .grid {
+  display: grid;
+  gap: 14px;
+}
+.vg-demo .grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.vg-demo .grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.vg-demo .field {
+  margin: 0;
+}
+
+/* ── Buttons (mismo lenguaje que .liquid-glass del hero) ─── */
+.vg-demo .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.vg-demo .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.vg-demo .btn-gold {
+  background: var(--gold);
+  color: var(--gold-ink);
+  border-color: var(--gold);
+}
+.vg-demo .btn-gold:hover:not(:disabled) {
+  background: var(--accent-to);
+}
+.vg-demo .btn-ghost {
+  background: transparent;
+  color: var(--ink);
+}
+.vg-demo .btn-ghost:hover:not(:disabled) {
+  background: var(--glass-bg);
+}
+.vg-demo .btn-block {
+  width: 100%;
+}
+
+/* ── NCM result ─────────────────────────────────────────── */
+.vg-demo .ncm-hit {
+  border: 1.5px solid var(--gold-border);
+  background: var(--gold-soft);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-top: 18px;
+}
+.vg-demo .ncm-hit__code {
+  font-family: var(--mono);
+  font-size: 23px;
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.vg-demo .confidence-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin-top: 10px;
+}
+.vg-demo .confidence-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+}
+.vg-demo .chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.vg-demo .chip {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--soft);
+  cursor: default;
+}
+.vg-demo .candidate {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  margin-top: 8px;
+  cursor: pointer;
+  background: transparent;
+}
+.vg-demo .candidate:hover {
+  border-color: var(--gold-border);
+}
+.vg-demo .candidate.selected {
+  border: 1.5px solid var(--gold);
+  background: var(--gold-soft);
+}
+
+/* ── Routes ─────────────────────────────────────────────── */
+.vg-demo .routes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.vg-demo .route-card {
+  border: none;
+  padding: 26px 24px;
+  background: var(--paper);
+  position: relative;
+}
+.vg-demo .route-card.best {
+  background: var(--gold-soft);
+  box-shadow: inset 0 0 0 1.5px var(--gold);
+}
+.vg-demo .route-card__badge {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background: var(--gold);
+  color: var(--gold-ink);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom-left-radius: var(--radius);
+}
+.vg-demo .route-card__name {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.vg-demo .route-card__pais {
+  font-family: var(--mono);
+  color: var(--soft);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.vg-demo .route-card__big {
+  font-family: var(--mono);
+  font-size: 24px;
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.vg-demo .route-card__unit {
+  color: var(--soft);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* ── Breakdown table ────────────────────────────────────── */
+.vg-demo .breakdown {
+  display: grid;
+  gap: 0;
+}
+.vg-demo .line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+.vg-demo .line.red {
+  background: var(--red-soft);
+}
+.vg-demo .line.green {
+  background: var(--green-soft);
+}
+.vg-demo .line .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.vg-demo .line.red .dot {
+  background: var(--red);
+}
+.vg-demo .line.green .dot {
+  background: var(--green);
+}
+.vg-demo .line strong {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  font-size: 13.5px;
+}
+.vg-demo .subtotal {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  border-top: 1.5px solid var(--rule);
+  margin-top: 6px;
+  font-weight: 700;
+  font-family: var(--serif);
+}
+.vg-demo .subtotal span:last-child,
+.vg-demo .subtotal strong {
+  font-family: var(--mono);
+  font-weight: 600;
+}
+.vg-demo .legend {
+  display: flex;
+  gap: 20px;
+  margin: 6px 0 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--soft);
+}
+.vg-demo .legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.vg-demo .total-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1.5px solid var(--gold-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 20px;
+}
+.vg-demo .total-box > div {
+  background: var(--gold-soft);
+  padding: 18px 14px;
+  text-align: center;
+}
+.vg-demo .total-box .k {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--soft);
+  font-weight: 600;
+}
+.vg-demo .total-box .v {
+  font-size: 21px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: -0.02em;
+  margin-top: 6px;
+  color: var(--ink);
+}
+.vg-demo .total-box .v.gold {
+  color: var(--gold);
+}
+/* Same box, 2 cells instead of 3 (FOB vs. destino) — kept as its own class
+   instead of an inline gridTemplateColumns override so the 760px collapse
+   below can still reach it (inline styles beat plain class rules). */
+.vg-demo .total-box-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ── Marketing ──────────────────────────────────────────── */
+.vg-demo .mkt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.vg-demo .mkt-block {
+  border: none;
+  padding: 24px;
+  background: var(--paper);
+}
+.vg-demo .mkt-block h4 {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  margin-bottom: 10px;
+  font-weight: 600;
+  border-bottom: 2px solid var(--gold);
+  display: inline-block;
+  padding-bottom: 3px;
+}
+.vg-demo .mkt-block ul {
+  padding-left: 18px;
+}
+.vg-demo .mkt-block li {
+  margin: 5px 0;
+  color: var(--text-soft);
+}
+.vg-demo .mkt-block p {
+  color: var(--text-soft);
+}
+.vg-demo .mkt-block.full {
+  grid-column: 1 / -1;
+}
+
+/* ── Misc ───────────────────────────────────────────────── */
+.vg-demo .hint {
+  color: var(--soft);
+  font-size: 13px;
+  margin-top: 8px;
+}
+.vg-demo .alert {
+  border-radius: var(--radius);
+  padding: 13px 15px;
+  font-size: 14px;
+  margin-top: 14px;
+}
+.vg-demo .alert.error {
+  background: var(--red-soft);
+  border: 1px solid var(--red);
+  color: var(--red);
+}
+.vg-demo .alert.info {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-border);
+  color: var(--ink);
+}
+.vg-demo .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--rule);
+  border-top-color: var(--ink);
+  border-radius: 50%;
+  animation: vg-demo-spin 0.7s linear infinite;
+}
+.vg-demo .spinner.gold {
+  border-color: var(--rule);
+  border-top-color: var(--gold);
+}
+@keyframes vg-demo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.vg-demo .muted {
+  color: var(--soft);
+}
+.vg-demo .mt {
+  margin-top: 18px;
+}
+
+/* prefers-reduced-motion vive también en 20-reduced-motion.css, pero ese
+   archivo no conoce estas clases (se agregó después). Se neutraliza acá
+   también para no depender del orden de import. */
+@media (prefers-reduced-motion: reduce) {
+  .vg-demo .spinner {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .vg-demo .grid-2,
+  .vg-demo .grid-3,
+  .vg-demo .grid-4,
+  .vg-demo .routes,
+  .vg-demo .total-box,
+  .vg-demo .total-box-2,
+  .vg-demo .mkt-grid,
+  .vg-demo .regime-selector {
+    grid-template-columns: 1fr;
+  }
+  .vg-demo .card {
+    padding: 20px;
+  }
+  .vg-demo .btn {
+    white-space: normal;
+    text-align: center;
+  }
+}

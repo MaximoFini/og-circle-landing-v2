@@ -1,0 +1,215 @@
+/* ── Story Collapse ──────────────────────── */
+.story-wrapper {
+  margin-top: 32px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 20px;
+}
+
+.story-toggle {
+  background: transparent;
+  border: none;
+  color: var(--accent-from);
+  font-family: monospace;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.story-timeline {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 65ch;
+  list-style: none;
+}
+
+.story-timeline-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 20px;
+  position: relative;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.story-timeline-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.story-timeline-year {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-from);
+  letter-spacing: 0.04em;
+}
+
+.story-timeline-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.story-timeline-body p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ── Footer ──────────────────────────────── */
+.site-footer {
+  position: relative;
+  background: var(--bg);
+  border-top: 1px solid var(--glass-border);
+  padding: 48px 0;
+  overflow: hidden;
+}
+
+.footer-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-logo {
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 0.12em;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.footer-logo-sub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.05em;
+}
+
+.footer-links {
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.footer-attribution {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.03em;
+}
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: right;
+  font-size: 12px;
+  font-family: monospace;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.footer-contact-title {
+  color: #fff;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 32px;
+  }
+  .footer-brand {
+    align-items: center;
+    text-align: center;
+  }
+  .footer-contact {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* ── Footer starfield ─────────────────────────────────────────────────────
+   Reuses .hero-layer--dust + .dust--a/b as background. .wrap below becomes
+   position: relative to guarantee it paints above this positioned,
+   z-index:0 child. */
+.footer-stars.footer-stars {
+  position: absolute;
+  inset: -4%;
+  z-index: 0;
+  opacity: 0.9;
+}
+
+/* ── Founder Grid ────────────────────────── */
+.founder-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+.founder-photo-placeholder {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  border-radius: 20px;
+  border: 1px dashed var(--glass-border-active);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 24px;
+}
+
+/* ── Responsive ──────────────────────────── */
+@media (max-width: 940px) {
+  .prices-container {
+    grid-template-columns: 1fr;
+  }
+
+  .price-card {
+    max-width: 480px;
+    margin-inline: auto;
+  }
+
+  .founder-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .founder-photo-placeholder {
+    max-width: 340px;
+    margin-inline: auto;
+    order: -1;
+  }
+}
+
+/* ── Selection ───────────────────────────── */
+::selection {
+  background: rgba(217, 158, 0, 0.3);
+  color: #fff;
+}

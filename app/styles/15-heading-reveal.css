@@ -1,0 +1,92 @@
+/* ══════════════════════════════════════════
+   C3 · KINETIC h2 REVEAL
+══════════════════════════════════════════
+
+   NO BASE RULE HIDES AN h2. That's the whole point: the default state of all
+   8 h2s is what the server renders — visible. Hidden lives only behind
+   [data-reveal='pending'], written exclusively by SectionReveal.tsx. Without
+   JS (old browser, JS off, failed hydration) titles stay visible. If the
+   hidden state lived in the base rule instead, any of those cases would
+   leave half the site without titles, permanently.
+
+   Three states, all written by JS:
+     pending -> below the fold, hidden, waiting
+     in      -> entered viewport, animation runs once
+     done    -> was already on screen at load; visible, no animation
+                (animating from hidden here would flash)
+
+   No animation-timeline: view() — a view timeline scrubs against scroll, so
+   scrolling back up would undo the reveal, and the requirement is that each
+   h2 reveals exactly ONCE. Incompatible, no way to latch a view timeline in
+   stable CSS. Longer note in SectionReveal.tsx.
+
+   No animating letter-spacing: triggers layout, and .elegant-section h2 is
+   uppercase with letter-spacing: -0.02em — tightening it overlaps glyphs in
+   Montserrat 700. Only opacity, clip-path and filter animate (the three
+   layout-safe properties). Lines aren't wrapped in spans either: the 8 h2s
+   are server-rendered text and splitting them via JS causes CLS and breaks
+   selection. */
+
+.elegant-section h2[data-reveal='pending'] {
+  opacity: 0;
+  clip-path: inset(0 0 42% 0);
+  filter: blur(4px);
+}
+
+.elegant-section h2[data-reveal='in'] {
+  animation: heading-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Title uncovers bottom-to-top as it resolves focus. No displacement: the
+   system's motion budget is 24px and none is needed here — clip-path alone
+   sells the entrance. */
+@keyframes heading-reveal {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 42% 0);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    filter: blur(0);
+  }
+}
+
+/* ── Gradient text ──────────────────────────────────────────────────────
+   Used to be inline in page.tsx (one spot). Moved to a class to animate the
+   sweep. background-size: 200% + animating background-position is the cheap
+   route — no layout/reflow, unlike animating background-size or the
+   gradient itself.
+
+   Default state is amber visible at both ends of the sweep, so the text
+   still reads correctly if the animation never runs. */
+.text-gradient {
+  background-image: linear-gradient(to right,
+      var(--accent-from),
+      var(--accent-to),
+      var(--accent-from));
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Starts ~200ms after the rest of the reveal, so it reads as a second beat
+   instead of part of the same movement. */
+.elegant-section h2[data-reveal='in'] .text-gradient {
+  animation: text-gradient-sweep 0.9s ease-out 0.2s both;
+}
+
+@keyframes text-gradient-sweep {
+  from {
+    background-position: 0% 0;
+  }
+
+  to {
+    background-position: 100% 0;
+  }
+}

@@ -1,0 +1,104 @@
+/* ══════════════════════════════════════════
+   DESTINATIONS MARQUEE — infinite horizontal ticker
+   Inspired by Digital Epoch / RIVR (MotionSites).
+   Pure CSS, zero JS, zero dependencies.
+══════════════════════════════════════════ */
+
+/* Container — hides overflow, applies edge fade mask */
+.route-ticker {
+  overflow: hidden;
+  /* Fades the horizontal edges to avoid an abrupt cut */
+  -webkit-mask-image: linear-gradient(to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent);
+  mask-image: linear-gradient(to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent);
+  /* Divider: a very subtle amber line top/bottom */
+  border-top: 1px solid rgba(217, 158, 0, 0.12);
+  border-bottom: 1px solid rgba(217, 158, 0, 0.12);
+  padding: 14px 0;
+}
+
+/* Inner track — the two duplicated groups run back-to-back for the loop */
+.route-ticker-track {
+  display: flex;
+  width: max-content;
+  /* 40s: slow and elegant, not urgent */
+  animation: ticker-scroll 40s linear infinite;
+  gap: 0;
+}
+
+/* One block of items (duplicated in the markup for the continuous loop) */
+.route-ticker-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+/* Each text item */
+.route-ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 28px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+/* First span of each item is the city; second is the country/ref */
+.route-ticker-item .ticker-city {
+  color: var(--text-secondary);
+}
+
+.route-ticker-item .ticker-ref {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* Amber separator dot between items */
+.route-ticker-sep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-from);
+  opacity: 0.6;
+  flex-shrink: 0;
+  margin: 0 12px;
+}
+
+@-webkit-keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}

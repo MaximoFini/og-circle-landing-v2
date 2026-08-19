@@ -1,0 +1,612 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Z-AXIS — hero parallax, hangar floor, tilt/reflection (see 17-tilt-lantern.css)
+
+   This block sits deliberately BEFORE prefers-reduced-motion (the file's
+   last block): @media doesn't add specificity, so if these rules came after
+   they'd win over reduced-motion and the user preference would have no
+   effect.
+
+   Everything here animates only transform / opacity / filter. Zero
+   dependencies.
+══════════════════════════════════════════════════════════════════════════ */
+
+/* Hero scroll progress, 0 (top) -> 1 (hero out of view). Registered via
+   @property so animation-timeline: scroll() can interpolate it — an
+   unregistered custom property isn't animatable. */
+@property --hsp {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+/* Angle for .gradient-border's conic sweep (class lives in 01-base.css next
+   to .liquid-glass, the system's other mask-clip border). Grouped here with
+   the file's other two animated custom properties for a single read.
+
+   `inherits: false`, opposite of --hsp: --angle is only used by the ::before
+   that declares it — if it inherited, any nested .gradient-border (or any
+   child) would pick up the parent's angle and sync by accident. */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Whole-page scroll progress, 0 -> 1. Consumed by the nav capsule's bottom
+   thread (.nav-header::after in 03-nav.css).
+
+   `inherits: true`, like --hsp, unlike --angle — not a style choice: the
+   value is written on .nav-header (by the @supports scroll-timeline branch,
+   or by SiteHeader.tsx's style.setProperty fallback) and read by its ::after.
+   A pseudo-element inherits from its originating element, so with
+   `inherits: false` the ::after would get the initial-value (0) and the
+   thread would never move. JS also can't write a custom property directly
+   onto a pseudo-element — inheritance is the only path. */
+@property --progress {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+/* ── Hero: four Z-planes ───────────────────────────────────────────────── */
+
+.hero-stage {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ambient-audio-toggle {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.ambient-audio-toggle:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.whatsapp-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 40;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 15, 15, 0.6);
+  backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+}
+
+.whatsapp-float:hover {
+  color: #25d366;
+  border-color: rgba(37, 211, 102, 0.4);
+  background: rgba(15, 15, 15, 0.8);
+  transform: translateY(-2px);
+}
+
+.whatsapp-float-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  animation: whatsapp-ping 2.8s ease-out infinite;
+}
+
+@keyframes whatsapp-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  70%,
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-float-ping {
+    animation: none;
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .whatsapp-float {
+    right: 14px;
+    bottom: 14px;
+    width: 42px;
+    height: 42px;
+  }
+}
+
+.nav-cta-group {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav-cta-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+/* Plane 1 — video (farthest): pulls back and desaturates on scroll. */
+.hero-layer--video {
+  position: absolute;
+  inset: -4%;
+  z-index: 0;
+  transform: scale(calc(1 - 0.04 * var(--hsp)));
+  filter:
+    saturate(calc(1 - 0.55 * var(--hsp))) brightness(calc(1 - 0.22 * var(--hsp)));
+  will-change: transform, filter;
+  backface-visibility: hidden;
+}
+
+.hero-layer--video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Hide iOS Safari native play button overlay on decorative background videos */
+.hero-layer--video video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+/* Veil blending the video into the page's #050505. Stays fixed to the stage
+   — moving it would break the seam with the section below. */
+.hero-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+      rgba(5, 5, 5, 0.35) 0%,
+      rgba(5, 5, 5, 0.1) 40%,
+      rgba(5, 5, 5, 0.7) 80%,
+      #050505 100%);
+  /* Avoids gradient repaints during scroll */
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* Plane 2 — suspended dust. */
+.hero-layer--dust {
+  position: absolute;
+  inset: -4%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.8;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.dust {
+  display: block;
+  position: absolute;
+  inset: -12%;
+  background-repeat: repeat;
+}
+
+/* Two tiles at different density/speed. The brightest speck sits at 0.75 x
+   0.55 layer opacity = 41% white: crisp against the hero's dark edge,
+   invisible over the planet's lit limb — correct, since dust should show
+   crossing light, not sitting on it. */
+.dust--a {
+  background-image:
+    radial-gradient(1.7px 1.7px at 18% 24%, rgba(255, 255, 255, 0.95), transparent 62%),
+    radial-gradient(1.3px 1.3px at 63% 57%, rgba(255, 255, 255, 0.80), transparent 62%),
+    radial-gradient(1.9px 1.9px at 87% 11%, rgba(255, 255, 255, 0.65), transparent 62%),
+    radial-gradient(1.3px 1.3px at 37% 81%, rgba(255, 255, 255, 0.85), transparent 62%),
+    radial-gradient(1.5px 1.5px at 8% 62%, rgba(255, 255, 255, 0.75), transparent 62%),
+    radial-gradient(1.3px 1.3px at 74% 88%, rgba(255, 255, 255, 0.60), transparent 62%),
+    radial-gradient(1.1px 1.1px at 45% 15%, rgba(255, 255, 255, 0.55), transparent 62%),
+    radial-gradient(1.1px 1.1px at 96% 43%, rgba(255, 255, 255, 0.50), transparent 62%),
+    radial-gradient(1.1px 1.1px at 26% 45%, rgba(255, 255, 255, 0.55), transparent 62%);
+  background-size: 300px 260px;
+  animation: dust-a 52s linear infinite;
+}
+
+.dust--b {
+  background-image:
+    radial-gradient(1.4px 1.4px at 72% 18%, rgba(255, 255, 255, 0.75), transparent 62%),
+    radial-gradient(2.1px 2.1px at 28% 66%, rgba(255, 255, 255, 0.55), transparent 62%),
+    radial-gradient(1.3px 1.3px at 52% 38%, rgba(255, 255, 255, 0.68), transparent 62%),
+    radial-gradient(1.6px 1.6px at 91% 74%, rgba(255, 255, 255, 0.58), transparent 62%),
+    radial-gradient(1.3px 1.3px at 14% 6%, rgba(255, 255, 255, 0.62), transparent 62%),
+    radial-gradient(1.1px 1.1px at 61% 90%, rgba(255, 255, 255, 0.48), transparent 62%),
+    radial-gradient(1.1px 1.1px at 5% 32%, rgba(255, 255, 255, 0.50), transparent 62%);
+  background-size: 430px 380px;
+  animation: dust-b 88s linear infinite;
+}
+
+/* Offset is an exact tile, so the loop has no seam. */
+@keyframes dust-a {
+  to {
+    transform: translate3d(0, -260px, 0);
+  }
+}
+
+@keyframes dust-b {
+  to {
+    transform: translate3d(0, -380px, 0);
+  }
+}
+
+/* ── Plane 1.5 · Sky: moon and comets ──────────────────────────────────────
+   Sits BETWEEN the veil (z1) and the dust (z2): dust passes in front of the
+   moon like a subtle haze (correct), but behind the comets, which sit closer
+   to the viewer within the same layer. Pure CSS, same gradients+keyframes
+   language as .dust — no dependencies. */
+.hero-layer--sky {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Moon container: only position, size, outer glow. The actual sphere — real
+   Three.js, photo texture + directional light — lives in components/Moon.tsx,
+   mounting a <canvas> WebGL that fills this div (react-three-fiber). */
+.hero-moon {
+  position: absolute;
+  top: clamp(92px, 13vh, 148px);
+  right: clamp(24px, 7vw, 100px);
+  width: clamp(70px, 8.8vw, 145px);
+  height: clamp(70px, 8.8vw, 145px);
+  filter: drop-shadow(0 0 22px rgba(255, 250, 235, 0.16)) drop-shadow(0 0 52px rgba(255, 250, 235, 0.09));
+  animation: moon-glow 7s ease-in-out infinite;
+  will-change: filter;
+}
+
+/* El canvas de Three.js / @react-three/fiber necesita height explícito
+   en el contenedor para que ResizeObserver pueda medirlo y renderizar. */
+.hero-moon canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.hero-cta-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+@keyframes moon-glow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 22px rgba(255, 250, 235, 0.16)) drop-shadow(0 0 52px rgba(255, 250, 235, 0.09));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 28px rgba(255, 250, 235, 0.24)) drop-shadow(0 0 64px rgba(255, 250, 235, 0.14));
+  }
+}
+
+/* Comets: the trail is a ::before, a narrow line fading back from the bright
+   point. Point and trail travel together since they're one element — no two
+   animations to keep in sync. Each comet flies ONCE per long cycle (6-9s
+   real flight time over a 14-22s total), like a real shooting star: offscreen
+   and opacity 0 the rest of the time. */
+.comet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.comet::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 110px;
+  height: 1px;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.85), transparent);
+  transform: translateY(-50%) rotate(180deg);
+  transform-origin: right center;
+}
+
+.comet--a {
+  top: 14%;
+  left: 8%;
+  animation: comet-fly-a 16s linear infinite;
+  animation-delay: 1.2s;
+}
+
+.comet--b {
+  top: 6%;
+  left: 48%;
+  animation: comet-fly-b 21s linear infinite;
+  animation-delay: 6.5s;
+}
+
+.comet--c {
+  top: 26%;
+  left: 68%;
+  animation: comet-fly-c 19s linear infinite;
+  animation-delay: 11s;
+}
+
+@keyframes comet-fly-a {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(32deg);
+    opacity: 0;
+  }
+
+  6% {
+    opacity: 1;
+  }
+
+  17% {
+    opacity: 1;
+  }
+
+  24% {
+    transform: translate3d(280px, 190px, 0) rotate(32deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate3d(280px, 190px, 0) rotate(32deg);
+    opacity: 0;
+  }
+}
+
+@keyframes comet-fly-b {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(28deg);
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  14% {
+    opacity: 1;
+  }
+
+  20% {
+    transform: translate3d(240px, 150px, 0) rotate(28deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate3d(240px, 150px, 0) rotate(28deg);
+    opacity: 0;
+  }
+}
+
+@keyframes comet-fly-c {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(35deg);
+    opacity: 0;
+  }
+
+  4% {
+    opacity: 1;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  18% {
+    transform: translate3d(220px, 170px, 0) rotate(35deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate3d(220px, 170px, 0) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+/* Planes 3 and 4 — content. */
+.hero-content {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(100px, 15vw, 160px) clamp(20px, 5vw, 72px) clamp(60px, 8vw, 100px);
+  /* Pre-promotes to a GPU layer to avoid recalcs during scroll */
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.hero-layer--text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate3d(0, calc(var(--hsp) * -22px), 0);
+  /* Stays fully opaque */
+  opacity: 1;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.hero-layer--numbers {
+  width: 100%;
+  max-width: 780px;
+  margin-inline: auto;
+  transform: translate3d(0, calc(var(--hsp) * -12px), 0);
+  /* Stays fully opaque */
+  opacity: 1;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Progressive enhancement: where scroll timelines exist, --hsp is resolved
+   by the compositor and HeroParallax doesn't even register the scroll
+   listener (the pointer one still has to be JS, no other way). */
+@keyframes hero-scroll {
+  from {
+    --hsp: 0;
+  }
+
+  to {
+    --hsp: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .hero-stage {
+    animation-name: hero-scroll;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 100vh;
+  }
+}
+
+/* ── Hangar: the infinite-perspective floor ────────────────────────────── */
+
+.hangar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(170px, 30vh, 290px);
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  /* Real vanishing point sits 585px above the bottom edge (perspective /
+     tan(62deg)) — well above the container's height, so there's never a
+     "hard" horizon; the mask fades the grid out long before it. */
+  perspective: 1100px;
+  perspective-origin: 50% 100%;
+  /* Mask in SCREEN space: fades the sides and softens the top edge against
+     the video, which would otherwise clip hard. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 40%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 40%);
+  mask-composite: intersect;
+}
+
+/* The floor needs a black backing to exist: over the planet's bright limb, a
+   line at 9% white disappears. This veil also sinks the hero's last third
+   toward the page's #050505, and incidentally fixes .numbers-bar labels
+   (28% white) landing on the video's brightest area. */
+.hangar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(5, 5, 5, 0.9) 0%,
+      rgba(5, 5, 5, 0.78) 34%,
+      rgba(5, 5, 5, 0.5) 64%,
+      rgba(5, 5, 5, 0.18) 86%,
+      transparent 100%);
+}
+
+.hangar-plane {
+  position: absolute;
+  bottom: 0;
+  left: -40%;
+  right: -40%;
+  height: 800px;
+  transform-origin: 50% 100%;
+  transform: rotateX(62deg);
+  /* Mask in PLANE space (i.e. by distance): the grid fades with depth. Stops
+     are solved against the real projection (y = h*cos62*1100 / (1100 +
+     h*sen62)) so on screen the grid hits 50% at 90px from the bottom edge
+     and zero at 200px, well before the horizon. Changing perspective,
+     rotateX or the height forces recomputing these. */
+  -webkit-mask-image:
+    linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.5) 28%, rgba(0, 0, 0, 0.12) 59%, transparent 81%);
+  mask-image:
+    linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.5) 28%, rgba(0, 0, 0, 0.12) 59%, transparent 81%);
+}
+
+.hangar-lines {
+  position: absolute;
+  inset: 0;
+  /* Rectangular cell: 110px bay width vs 64px depth. Square gave a 20-column
+     grid that read as Tron; this reads as a hangar. Cross lines are 1.6px
+     because perspective compresses them vertically and 1px loses alpha. */
+  --hangar-depth: 64px;
+  --hangar-bay: 110px;
+  --hangar-line: rgba(255, 255, 255, 0.09);
+  background-image:
+    repeating-linear-gradient(90deg, var(--hangar-line) 0 1px, transparent 1px var(--hangar-bay)),
+    repeating-linear-gradient(0deg, var(--hangar-line) 0 1.6px, transparent 1.6px var(--hangar-depth));
+  /* One exact tile per cycle, so the loop has no seam. Animates
+     background-position, not transform, on purpose: promoting the plane
+     (800 x 2270px) to a compositor layer would need a huge texture;
+     repainting the visible strip is much cheaper, and cost drops to zero
+     once the hero leaves the viewport. */
+  animation: hangar-drift 9s linear infinite;
+}
+
+/* Reads --hangar-depth from the animated element itself, so resizing the
+   cell doesn't require touching this too. Only the second layer shifts: the
+   first is the bay lines and moving it in Y does nothing. */
+@keyframes hangar-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 0 0, 0 var(--hangar-depth);
+  }
+}
+
+/* Amber haze at the vanishing point. Outside the plane's depth mask but
+   inside the container's screen mask — no edge of its own anywhere. */
+.hangar-haze {
+  position: absolute;
+  inset: 0;
+  /* Low-alpha white under the amber: reads as LIGHT, not pigment (amber
+     alone on black skews olive). */
+  background:
+    radial-gradient(86% 32% at 50% 32%, rgba(255, 255, 255, 0.03), transparent 72%),
+    radial-gradient(108% 46% at 50% 30%,
+      rgba(217, 158, 0, 0.062) 0%,
+      rgba(217, 158, 0, 0.02) 38%,
+      transparent 76%);
+}

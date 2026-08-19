@@ -1,0 +1,266 @@
+/* ── Tilt with specular reflection ────────────────────────────────────── */
+
+[data-tilt] {
+  /* No transform at rest: a 3D-transformed element gets promoted to a layer
+     and its text rasterizes at scale — the classic "blurry text" 3D-card
+     bug. Only transforms while the pointer is over it. */
+  --tilt-dur: 0.5s;
+  --tilt-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --tilt-lift: 1;
+}
+
+[data-tilt][data-tilting] {
+  --tilt-dur: 0.1s;
+  --tilt-ease: linear;
+  z-index: 3;
+  transform:
+    perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--tilt-lift));
+}
+
+/* In gap-based grids (where the gap draws the divider), the tilting card
+   lifts 2.2% to cover the ~4px the rotation steals from its inner edge and
+   avoid a seam opening against its neighbor. */
+.problems-grid-v2>[data-tilt],
+.features-grid-v2>[data-tilt] {
+  --tilt-lift: 1.026;
+}
+
+.problems-grid-v2>[data-tilt][data-tilting],
+.features-grid-v2>[data-tilt][data-tilting] {
+  box-shadow: 0 20px 44px -22px rgba(0, 0, 0, 0.95);
+}
+
+.prices-container>[data-tilt][data-tilting] {
+  box-shadow: 0 26px 60px -30px rgba(0, 0, 0, 0.9);
+}
+
+.price-card {
+  position: relative;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.4s ease,
+    transform var(--tilt-dur, 0.5s) var(--tilt-ease, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+/* The reflection: a small tight white source (the specular proper) over a
+   wider amber halo (the system rim light). Both come from --mx/--my (cursor
+   position). Without JS (coarse pointer, reduced-motion) they fall back to
+   20%/16%, the same fixed top-left radial .feature-shine used to have. */
+.feature-shine,
+.problem-card-v2::after,
+.price-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background:
+    radial-gradient(170px circle at var(--mx, 20%) var(--my, 16%),
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0) 64%),
+    radial-gradient(340px circle at var(--mx, 20%) var(--my, 16%),
+      rgba(245, 184, 19, 0.055),
+      rgba(217, 158, 0, 0.014) 42%,
+      transparent 74%);
+}
+
+.problem-card-v2:hover::after,
+.price-card:hover::after {
+  opacity: 1;
+}
+
+/* ── Holographic card — the "Avanzado" plan ───────────────────────────────
+   .gradient-border::before already owns the ::before. The foil merges into
+   the existing ::after (the specular reflection) instead: same
+   pseudo-element, three background layers stacked.
+
+   Extra layer on .price-card.featured::after: a slow-spinning amber conic
+   (8s/turn) below the cursor specular — gives the "collector card" pulse
+   without moving anything.
+
+   Cursor specular (the two existing radial layers) stays on top, driven by
+   --mx/--my. The foil sits underneath, always visible.
+
+   Intensity ~40% at rest: full power reads as a casino, 40% reads as a
+   collector's piece. */
+
+@property --foil-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Overrides .price-card's ::after only for the featured variant: adds the
+   conic layer beneath the existing specular. */
+.price-card.featured::after {
+  /* Full conic rotation every 8 seconds */
+  animation: foil-spin 8s linear infinite;
+  background:
+    /* Point specular white — same as the base ::after */
+    radial-gradient(170px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 255, 255, 0.07),
+      rgba(255, 255, 255, 0) 64%),
+    /* Amber rim light — same as the base ::after */
+    radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(245, 184, 19, 0.07),
+      rgba(217, 158, 0, 0.018) 42%,
+      transparent 74%),
+    /* Spinning conic — the foil itself (bottom layer) */
+    conic-gradient(from var(--foil-angle) at 50% 50%,
+      rgba(217, 158, 0, 0.00) 0deg,
+      rgba(245, 184, 19, 0.13) 45deg,
+      rgba(255, 230, 120, 0.08) 85deg,
+      rgba(255, 255, 255, 0.05) 115deg,
+      rgba(245, 184, 19, 0.09) 165deg,
+      rgba(217, 158, 0, 0.00) 210deg,
+      rgba(217, 158, 0, 0.00) 360deg);
+  /* Foil visible at 60% at rest (shows even without a cursor). On hover,
+     opacity rises to 100% along with the cursor specular. */
+  opacity: 0.6;
+}
+
+.price-card.featured:hover::after {
+  opacity: 1;
+}
+
+@keyframes foil-spin {
+  to {
+    --foil-angle: 360deg;
+  }
+}
+
+/* ── The lantern over the problems grid ───────────────────────────────────
+   The 4 cards in #problema dim when the pointer enters the grid, and a halo
+   that follows the cursor restores full text opacity as it passes. Reuses
+   --mx/--my exactly as TiltGrid writes them: no new listener, no new
+   IntersectionObserver.
+
+   Why ::before and not ::after: ::after is already the specular reflection
+   shared with .feature-shine and .price-card::after — untouched. That
+   reflection already IS the "amber halo following the cursor" — a second
+   amber glow would duplicate it. The lantern's job is REVEAL; the existing
+   ::after already provides the amber.
+
+   Why a veil and not opacity on .problem-content: the obvious route —
+   opacity: .45 on .problem-content, clipped by a radial mask-image — has a
+   coordinate problem: --mx/--my are percentages relative to the CARD, and
+   .problem-content is a child starting below the ghost number, so the same
+   50% lands at a different height and the halo goes vertically out of sync.
+
+   The veil goes on a ::before of the CARD instead, so coordinates are
+   correct without conversion, and the result matches pixel-for-pixel: over
+   --surface-1, a veil of the SAME color at 55% gives the text the same
+   composited value opacity: .45 would (0.55*10 + 0.45*120 = 59.6, i.e. 45%
+   of 120 over the same background). 45% — not the original 25% — is the
+   floor: 25% left body text below any readable threshold.
+
+   Only while the pointer is in the grid: the veil hangs off
+   [data-lantern]:hover, not [data-lantern] alone. Leaving all 4 cards
+   permanently dimmed would punish anyone scrolling past without touching
+   the mouse — dimming is a consequence of user intent, not a default.
+
+   Fail-safe: everything hangs off [data-lantern], written only by TiltGrid,
+   only under (hover:hover) and (pointer:fine) with no reduced-motion (same
+   matchMedia pair that gates tilt). Without JS, on coarse pointers, or with
+   the preference on, the attribute never exists — no veil, full content. The
+   DOM itself is never touched: no display:none, no conditional content. */
+[data-lantern] .problem-card-v2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Below the specular (z-index 1), above the flowed text. */
+  z-index: 0;
+  pointer-events: none;
+  background: var(--surface-1);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  /* The lantern's hole. Without --mx/--my (cards not under the cursor), the
+     center lands far outside the card and the mask stays fully opaque —
+     those cards just dim, with no hole. */
+  -webkit-mask-image: radial-gradient(260px circle at var(--mx, -200%) var(--my, -200%),
+      transparent 0%,
+      rgba(0, 0, 0, 0.4) 42%,
+      #000 80%);
+  mask-image: radial-gradient(260px circle at var(--mx, -200%) var(--my, -200%),
+      transparent 0%,
+      rgba(0, 0, 0, 0.4) 42%,
+      #000 80%);
+}
+
+[data-lantern]:hover .problem-card-v2::before {
+  opacity: 0.55;
+}
+
+/* ── Degradation on mobile / coarse pointer ────────────────────────────── */
+
+@media (hover: none),
+(pointer: coarse) {
+
+  /* No mouse, no tilt: cards don't rotate. Hero scroll (--hsp) still applies. */
+  [data-tilt][data-tilting] {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* No cursor, no lantern. TiltGrid already stops writing data-lantern under
+     pointer: coarse, so this only covers pointer capability changing mid-
+     session (touch+trackpad hybrids). No scroll-based reveal is implemented
+     as an alternative — a second reveal mechanism for a case the rule
+     already resolves as "off" would be complexity with no payoff. On mobile
+     all 4 cards read complete, always. */
+  [data-lantern] .problem-card-v2::before,
+  [data-lantern]:hover .problem-card-v2::before {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 680px) {
+
+  /* Hangar stays still and shorter: texture on mobile, not motion.
+     Perspective and plane height are untouched — the mask stops are solved
+     against those two numbers. What changes is the cell, since 110px bay
+     only fit three lines at 375px width. */
+  .hangar {
+    height: 140px;
+  }
+
+  .hangar-lines {
+    --hangar-bay: 68px;
+    --hangar-depth: 46px;
+    animation: none;
+  }
+
+  /* Dust stays but stops drifting: no point keeping two compositor layers
+     permanently in GPU memory on a phone without the animation. */
+  .hero-layer--dust {
+    opacity: 0.4;
+  }
+
+  .dust {
+    animation: none;
+  }
+
+  /* Sky: comets turn off entirely — the layer's
+     most expensive animation (three long timelines running in parallel),
+     and the phone already has dust and hangar competing for GPU. */
+
+  .comet {
+    display: none;
+  }
+
+  .hero-moon {
+    top: 256px;
+    left: 85%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 70px;
+  }
+
+  .hero-cta-wrapper {
+    margin-top: 28px;
+  }
+}

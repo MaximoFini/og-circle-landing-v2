@@ -1,0 +1,109 @@
+/* ── Numbers Bar ─────────────────────────── */
+.numbers-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 3vw, 40px);
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--glass-border);
+}
+
+/* ── Count-end flash ────────────────────────────────────────────────────
+   `NumbersBar.tsx` sets `data-counted` when a counter finishes; CSS fires an
+   amber flash on the card's bottom edge. JS never touches a style directly.
+
+   Flash starts and ends at opacity 0, so it self-clears — the attribute can
+   stay on the element forever without anything visibly stuck. Only `opacity`
+   animates.
+
+   The line is a "lamp", not a border: fades toward both edges so it doesn't
+   read as `.numbers-bar`'s border-top. */
+.num-card {
+  position: relative;
+}
+
+.num-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to right,
+      transparent 0%,
+      var(--accent-to) 50%,
+      transparent 100%);
+}
+
+.num-card[data-counted]::after {
+  animation: num-flash 0.6s ease-out both;
+}
+
+@keyframes num-flash {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.num-card .number {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--champagne);
+  line-height: 1;
+  /* Forces lining figures — Cormorant Garamond defaults to old-style digits
+     with mismatched heights/baselines, which broke the 3-card alignment. */
+  font-variant-numeric: lining-nums;
+}
+
+.num-card .label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 680px) {
+  .numbers-bar {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 16px;
+    padding-top: 24px;
+  }
+
+  .num-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .num-card .number {
+    font-size: 38px;
+    flex-shrink: 0;
+  }
+
+  .num-card .label {
+    margin-top: 0;
+    font-size: 13px;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    color: var(--text-secondary);
+    max-width: 260px;
+    line-height: 1.4;
+  }
+}

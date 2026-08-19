@@ -1,0 +1,298 @@
+/* ── Nav ─────────────────────────────────── */
+.nav-header {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 1200px;
+  height: 64px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(10, 10, 10, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  /* No `transition: all`: nothing on .nav-header actually transitions, this
+     was just forcing the engine to watch every animatable property. */
+}
+
+/* ── Scroll progress thread ────────────────────────────────────────────────
+   2px amber thread along the capsule's bottom edge, filling with WHOLE-PAGE
+   scroll progress (not the hero's).
+
+   Lives on .nav-header::after, not a JSX child, because <nav> stays mounted
+   at all breakpoints (.nav-links/.nav-cta just hide via media query) — so
+   the thread works the same on desktop and mobile.
+
+   `scaleX()`, not `width`: width triggers layout on every scroll frame.
+
+   32px inset each side = the capsule's effective corner radius (border-radius:
+   9999px on 64px height clamps to 32px) — keeps the thread on the straight
+   segment of the bottom edge, never clipped by the rounded ends.
+
+   Doesn't touch the capsule's backdrop-filter: it's a child pseudo-element,
+   not a new filter/background layered on top. */
+.nav-header::after {
+  content: '';
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  pointer-events: none;
+  background: linear-gradient(to right, var(--accent-from), var(--accent-to));
+  /* At 0 the thread doesn't exist: capsule looks untouched at the top. */
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left center;
+}
+
+/* ── Boat riding the progress thread ─────────────────────────────────────
+   Same track as .nav-header::after (32px inset, same bottom edge), but a
+   real element instead of a pseudo-element: it needs to be POSITIONED
+   (not scaled), and JS can't reach a ::after.
+
+   `left: calc(var(--progress, 0) * 100%)` — the 100% is the track's own
+   width (.nav-progress-track carries the same 32px inset), so progress
+   0..1 maps directly to 0%..100% of the real thread. --progress is
+   registered via @property (see bottom of file) as a <number>.
+
+   The wobble is a 2px rotate/translateY around the boat's own advance
+   point — stays inside the system's 24px motion budget. */
+.nav-progress-track {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.nav-progress-boat {
+  position: absolute;
+  left: calc(var(--progress, 0) * 100%);
+  bottom: 0;
+  color: var(--accent-to);
+  filter: drop-shadow(0 0 4px rgba(245, 184, 19, 0.45));
+  animation: nav-boat-bob 2.6s ease-in-out infinite;
+  will-change: left;
+}
+
+@keyframes nav-boat-bob {
+  0%, 100% { transform: translate(-50%, 50%) rotate(-4deg); }
+  50%      { transform: translate(-50%, calc(50% - 2px)) rotate(4deg); }
+}
+
+/* Progressive enhancement, same pairing as --hsp in the hero: where scroll
+   timelines exist, --progress is resolved by the compositor and SiteHeader
+   never registers a scroll listener. @property --progress is registered at
+   the bottom of the file, with --hsp and --angle. */
+@keyframes nav-progress {
+  from {
+    --progress: 0;
+  }
+
+  to {
+    --progress: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .nav-header {
+    animation-name: nav-progress;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+/* No own font-family: inherits Helvetica Now Var from body. */
+.nav-logo {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  display: flex;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.nav-logo-by {
+  display: block;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 2px;
+}
+
+.nav-links {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+}
+
+.nav-links a {
+  position: relative;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #fff;
+}
+
+/* ── Active section ─────────────────────────────────────────────────────
+   The link for the section crossing viewport center brightens to full
+   white and gets an amber dot below it.
+
+   The dot is an absolute ::after, not a border-bottom or new content, so
+   appearing/disappearing never shifts nav layout by a pixel.
+
+   Dot, not underline, on purpose: the capsule's bottom-edge progress thread
+   is already a 2px amber bar — two amber bars on the same piece would read
+   as the same mechanism.
+
+   `aria-current` is written by SiteHeader.tsx alongside `data-active`: the
+   highlight can't be purely visual. */
+.nav-links a[data-active] {
+  color: #fff;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-to);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.4);
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-links a[data-active]::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.nav-cta {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav-cta {
+    display: inline-flex;
+    background: #fff !important;
+    color: var(--bg) !important;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    padding: 8px 18px !important;
+    border-radius: 9999px;
+    transition: background 0.25s ease, transform 0.2s ease;
+    box-shadow: none !important;
+  }
+
+  .nav-cta::before {
+    display: none !important;
+  }
+
+  .nav-cta:hover {
+    background: #e5e5e5 !important;
+    transform: translateY(-1px);
+  }
+}
+
+.mobile-toggle-btn {
+  display: flex;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  padding: 8px;
+  z-index: 60;
+}
+
+@media (min-width: 1024px) {
+  .mobile-toggle-btn {
+    display: none;
+  }
+}
+
+/* Mobile overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(5, 5, 5, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 120px;
+  padding-bottom: 40px;
+  overflow-y: auto;
+  gap: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+.mobile-nav-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav-overlay a {
+  font-size: 32px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.mobile-nav-overlay a:hover {
+  color: #fff;
+}
+
+.mobile-audio-toggle.mobile-audio-toggle {
+  width: 46px;
+  height: 46px;
+}
+
+.mobile-audio-toggle.mobile-audio-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* NOTE: .problems-grid/.problem-card, .blueprint-*, .bp-* (BlueprintSteps
+   component, later removed entirely), .calc-* (v1), .triage-grid/.triage-panel
+   and .faq-container were removed: the markup only uses the -v2 variants now. */

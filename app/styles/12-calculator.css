@@ -1,0 +1,195 @@
+/* ══════════════════════════════════════════
+   DEMO CTA
+   Entrada a la demo real, pegada a la grilla de OG Circle (page.tsx) — no
+   es su propia seccion, es el link a uno de los 6 beneficios que esa
+   grilla ya lista. La demo en si (DemoModal -> DemoFlow) vive en
+   21-demo.css, nested bajo .vg-demo.
+══════════════════════════════════════════ */
+
+/* Generic screen-reader-only text, scoped here (no global .sr-only exists
+   in the repo yet). Usado por el titulo accesible del modal (DemoModal.tsx). */
+.vg-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.calc-demo-cta-row {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.calc-demo-intro {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.calc-demo-intro strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Reuses .liquid-glass (same visual language as the hero CTA), this class
+   only adds layout — no competing background/border here. */
+.calc-demo-cta {
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  padding: 14px 36px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calc-demo-microcopy {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ══════════════════════════════════════════
+   DEMO MODAL CHROME
+   Overlay + dialog frame only — DemoFlow's own ported styles live in
+   21-demo.css, nested under .vg-demo. First dialog/portal in the repo.
+══════════════════════════════════════════ */
+
+/* z-index budget (see 03-nav.css / 01-base.css): mobile nav overlay 40,
+   hamburger 60, .film-grain 99, .nav-header 100. 110 clears all of it. */
+.vg-demo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.vg-demo-modal-overlay.is-visible {
+  opacity: 1;
+}
+
+.vg-demo-modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: min(92vh, 940px);
+  overflow-y: auto;
+  background: var(--surface-1);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.28s ease;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+
+.vg-demo-modal-dialog::-webkit-scrollbar {
+  width: 4px;
+}
+
+.vg-demo-modal-dialog::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.vg-demo-modal-dialog::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+}
+
+.vg-demo-modal-dialog::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.vg-demo-modal-overlay.is-visible .vg-demo-modal-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.vg-demo-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.vg-demo-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.vg-demo-modal-loading {
+  padding: 80px 32px;
+  text-align: center;
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Explicit local check, mirrors the JS-side matchMedia guard in
+   DemoModal.tsx (dual check, same pattern as Moon.tsx / SectionReveal.tsx).
+   20-reduced-motion.css isn't touched here — these two classes exist only
+   in this file, so their reduced-motion override lives next to them. */
+@media (prefers-reduced-motion: reduce) {
+  .vg-demo-modal-overlay {
+    transition: none;
+  }
+
+  .vg-demo-modal-dialog {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* Mobile: full-bleed sheet instead of a floating card. At phone widths the
+   24px overlay padding + 20px radius ate real content width for zero
+   benefit, and — since the dialog itself carries no padding — the fixed
+   close button (top:16/right:16) sat directly on top of whatever content
+   render first (the demo's regime selector), overlapping its text. Edge to
+   edge + a reserved top strip fixes both. */
+@media (max-width: 640px) {
+  .vg-demo-modal-overlay {
+    padding: 0;
+  }
+
+  .vg-demo-modal-dialog {
+    max-width: 100%;
+    max-height: 100dvh;
+    height: 100dvh;
+    border-radius: 0;
+    padding: 60px 16px 16px;
+  }
+}

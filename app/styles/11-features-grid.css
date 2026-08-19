@@ -1,0 +1,313 @@
+/* ══════════════════════════════════════════
+   FEATURES GRID V2
+══════════════════════════════════════════ */
+.features-grid-v2 {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .features-grid-v2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .features-grid-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── OG Circle — gaze guide over the 6 features ────────────────────────────
+   .og-circle-wrap is the shared coordinate space for everything below: the
+   mobile rail and the desktop SVG overlay measure/position relative to this
+   div, not .features-grid-v2 (which lives inside it, untouched). */
+.og-circle-wrap {
+  position: relative;
+}
+
+/* Side rail (<=560px). The six dots space with space-around over the full
+   stack height — cards aren't measured in JS, they're similar enough height
+   that a purely decorative guide doesn't need it. */
+.og-rail {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 22px;
+  bottom: 22px;
+  width: 24px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.og-rail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1px dashed rgba(217, 158, 0, 0.25);
+  transform: translateX(-50%);
+}
+
+.og-rail-dot {
+  position: relative;
+  z-index: 1;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.og-rail-dot[data-active] {
+  background: var(--accent-from);
+  box-shadow: 0 0 10px rgba(217, 158, 0, 0.55);
+  transform: scale(1.5);
+}
+
+@media (max-width: 560px) {
+  .og-circle-wrap {
+    padding-left: 26px;
+  }
+
+  .og-rail {
+    display: flex;
+  }
+}
+
+/* The active card's highlight reuses exactly what the real hover already
+   does (background + shine + big number), pushed further with a halo and
+   slight scale so it reads even without comparing against the other five.
+   No more plane badge per card — the only plane in the section is the one
+   flying (.og-tour-plane below); the highlight alone has to mark "active". */
+.feature-card-v2[data-og-active] {
+  background: var(--surface-1-hover);
+  box-shadow: 0 0 0 1px var(--accent-40), 0 16px 36px -10px rgba(217, 158, 0, 0.4);
+  transform: scale(1.02);
+}
+
+.feature-card-v2[data-og-active] .feature-shine {
+  opacity: 1;
+}
+
+.feature-card-v2[data-og-active] .feature-num-big {
+  color: rgba(217, 158, 0, 0.16);
+}
+
+/* Desktop tour (>=901px). The line and plane read the same SVG path measured
+   in OGCircleFeatures.tsx, so they never drift apart. */
+.og-tour-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  animation: og-tour-line-in 0.8s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.og-tour-line path {
+  fill: none;
+  stroke: none;
+}
+
+@keyframes og-tour-line-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* The flying plane is no longer a badge with a circular background — it's
+   painted like .nav-progress-boat (solid color + drop-shadow, no box), just
+   bigger, so it reads as the same icon language as the boat.
+
+   z-index: 500 on purpose, well above .nav-header (100): the flight path can
+   pass near the section's top edge while the nav capsule stays fixed, and it
+   used to get covered by it.
+
+   offset-rotate: auto (not a fixed angle) so the plane always points in its
+   direction of travel — real banking against the curve, the piece that sells
+   "flight" instead of an icon sliding in a straight line.
+
+   Duration comes from an inline animationDuration (JS, same constant that
+   warms the highlight timers) — the 8s fallback below only applies if the
+   inline style fails to apply. */
+.og-tour-plane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--accent-to);
+  filter: drop-shadow(0 0 7px rgba(245, 184, 19, 0.6)) drop-shadow(0 0 16px rgba(245, 184, 19, 0.3));
+  transform: translate(-50%, -50%);
+  z-index: 500;
+  pointer-events: none;
+  offset-rotate: auto;
+  animation: og-tour-fly 17s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+}
+
+/* Own wobble, independent of the path — same pattern as nav-boat-bob: the
+   plane isn't just advancing along the curve, it also "lives" while doing it
+   (a subtle wing balance, never more than a few degrees). */
+.og-tour-plane-bob {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: og-tour-plane-bob 1.3s ease-in-out infinite;
+}
+
+@keyframes og-tour-plane-bob {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+
+  50% {
+    transform: translateY(-3px) rotate(5deg);
+  }
+}
+
+@keyframes og-tour-fly {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+
+  4% {
+    opacity: 1;
+  }
+
+  96% {
+    opacity: 1;
+  }
+
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .og-tour-line,
+  .og-tour-plane {
+    display: none;
+  }
+}
+
+.feature-card-v2 {
+  position: relative;
+  padding: 36px 28px 32px;
+  background: var(--surface-1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  /* Same tilt transition as .problem-card-v2. */
+  transition:
+    background 0.3s ease,
+    box-shadow 0.4s ease,
+    transform var(--tilt-dur, 0.5s) var(--tilt-ease, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.feature-card-v2:hover {
+  background: var(--surface-1-hover);
+}
+
+.feature-card-v2:hover .feature-shine {
+  opacity: 1;
+}
+
+.feature-num-big {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.04);
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.feature-card-v2:hover .feature-num-big {
+  color: rgba(217, 158, 0, 0.07);
+}
+
+.feature-cat {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-from);
+  margin-bottom: 4px;
+}
+
+.feature-title {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: clamp(16px, 1.8vw, 20px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.feature-body {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  /* .45 = min alpha for 4.5:1 on the card's #0a0a0a. */
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.7;
+  max-width: 36ch;
+}
+
+/* Card 07 — Comunidad. Spans the full 3-column width, horizontal layout on
+   desktop so the wide canvas reads as intentional rather than stretched. */
+.feature-card-v2[data-wide] {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 901px) {
+  .feature-card-v2[data-wide] {
+    flex-direction: row;
+    align-items: center;
+    gap: 48px;
+    padding: 44px 48px;
+  }
+
+  /* Pull the big number back into flow for the horizontal layout — it becomes
+     the visual anchor on the right instead of an absolute ghost in the corner. */
+  .feature-card-v2[data-wide] .feature-num-big {
+    position: relative;
+    top: auto;
+    right: auto;
+    flex-shrink: 0;
+    margin-left: auto;
+    font-size: 96px;
+    color: rgba(217, 158, 0, 0.07);
+  }
+
+  .feature-card-v2[data-wide]:hover .feature-num-big,
+  .feature-card-v2[data-wide][data-og-active] .feature-num-big {
+    color: rgba(217, 158, 0, 0.14);
+  }
+
+  .feature-card-v2[data-wide] .feature-body {
+    max-width: 52ch;
+  }
+}
+
+/* .feature-shine's actual definition (cursor-following radial, shared with
+   .problem-card-v2 and .price-card) lives in the tilt block near the end of
+   the file, next to the tilt effect it belongs with. */

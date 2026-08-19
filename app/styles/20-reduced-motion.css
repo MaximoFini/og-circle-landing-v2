@@ -1,0 +1,162 @@
+/* ══════════════════════════════════════════
+   PREFERS-REDUCED-MOTION
+   Only affects users with "reduce motion" on at the OS level.
+   Render is identical for everyone else.
+══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* ── Hangar ─────────────────────────────────────────────────────────
+     The grid stays: it's texture, not motion. What turns off is the
+     movement toward the viewer. */
+  .hangar-lines {
+    animation: none;
+  }
+
+  /* ── Hero ───────────────────────────────────────────────────────────
+     No mouse parallax, no pulling away from the video: all four layers
+     stay in place, full opacity, no filter. HeroParallax also registers
+     zero listeners and pauses the <video> on its first frame, which is
+     exactly the poster image. */
+  .hero-layer,
+  .hero-layer--video,
+  .hero-layer--dust,
+  .hero-layer--text,
+  .hero-layer--numbers {
+    transform: none;
+    opacity: 1;
+    filter: none;
+  }
+
+  .hero-stage {
+    animation: none;
+  }
+
+  .dust {
+    animation: none;
+  }
+
+  /* The moon becomes a static ornament; comets ARE motion, so they simply
+     don't exist under this preference — there's no still version of a
+     shooting star. */
+  .hero-moon {
+    animation: none;
+  }
+
+  .comet {
+    display: none;
+  }
+
+  /* ── Tilt ───────────────────────────────────────────────────────────
+     Cards don't tilt. The specular reflection still works: it's an
+     opacity fade on hover, not a displacement. */
+  [data-tilt],
+  [data-tilt][data-tilting] {
+    transform: none;
+  }
+
+  /* ── h2 reveal ──────────────────────────────────────────────────────
+     SectionReveal.tsx already bails out early under reduced-motion and
+     writes no attribute at all. This covers the other case: the user
+     enables the preference with the page open and an h2 is caught mid
+     'pending' or 'in'. All three states neutralize to visible and still. */
+  .elegant-section h2[data-reveal],
+  .elegant-section h2[data-reveal] .text-gradient {
+    animation: none;
+    opacity: 1;
+    clip-path: none;
+    filter: none;
+  }
+
+  /* ── Problems lantern ──────────────────────────────────────────────
+     TiltGrid already stops writing data-lantern under this preference —
+     same condition that disables tilt — so in practice the selector
+     doesn't even match. This covers the case where the user enables the
+     preference mid-session and the attribute survives one frame. */
+  [data-lantern] .problem-card-v2::before,
+  [data-lantern]:hover .problem-card-v2::before {
+    opacity: 0;
+    transition: none;
+  }
+
+  /* ── Hero numbers counter ──────────────────────────────────────────
+     NumbersBar.tsx already bails out early under this preference and
+     never mounts the observer: all three numbers sit at their final
+     value and never receive data-counted. This covers the other case —
+     the preference gets enabled mid-session while a flash is running. */
+  .num-card[data-counted]::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  /* ── Nav: progress thread and active section ───────────────────────
+     The thread turns off entirely — it's the only moving nav piece, and
+     leaving it stuck at an arbitrary value would be worse than not
+     having it. SiteHeader.tsx also skips the scroll listener under this
+     preference, so the JS fallback branch doesn't run either.
+
+     Active section DOES stay: that's a color change, not motion. Only
+     the dot's entrance scale is removed, replaced by a pure opacity
+     fade. */
+  .nav-header {
+    animation: none;
+  }
+
+  .nav-header::after {
+    display: none;
+  }
+
+  .nav-progress-boat {
+    display: none;
+  }
+
+  /* OG Circle — neither mechanism (mobile rail, desktop tour) ever
+     mounts via JS under this preference, but it's also disabled via CSS
+     as a safety net — same reasoning as the boat above. */
+  .og-rail,
+  .og-tour-line,
+  .og-tour-plane {
+    display: none;
+  }
+
+  .feature-card-v2[data-og-active] {
+    background: var(--surface-1);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .nav-links a::after,
+  .nav-links a[data-active]::after {
+    transform: translateX(-50%) scale(1);
+    transition: opacity 0.25s ease;
+  }
+
+  /* ── Gradient border ────────────────────────────────────────────────
+     The sweep turns off, the border stays. `animation: none` alone isn't
+     enough: without animation the conic freezes at --angle: 0deg and its
+     transparent arc leaves part of the edge undrawn — a broken border.
+     So it's also replaced by the system's flat amber gradient, which
+     closes the ring completely. */
+  .gradient-border::before {
+    animation: none;
+    background: linear-gradient(to right, var(--accent-from), var(--accent-to));
+  }
+
+  /* ── Destinations marquee ───────────────────────────────────────────
+     The track stays still at its initial position: content stays
+     visible (all four cities fit the width without scrolling) but
+     doesn't move. */
+  .route-ticker-track {
+    animation: none;
+  }
+
+  /* ── Holographic foil ───────────────────────────────────────────────
+     The conic stops spinning; the foil stays visible in its initial
+     position (amber at 45deg, 165deg) as a static reflection. Cursor
+     specular and hover keep working. */
+  .price-card.featured::after {
+    animation: none;
+  }
+}

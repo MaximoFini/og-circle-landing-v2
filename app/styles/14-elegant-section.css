@@ -1,0 +1,67 @@
+/* ══════════════════════════════════════════
+   ELEGANT SECTION — applies from the triage
+   block downward
+══════════════════════════════════════════ */
+.elegant-section h2 {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.elegant-section h3 {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.elegant-section p,
+.elegant-section li,
+.elegant-section .lede {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  /* No `opacity: .85` here on purpose: it dimmed the entire lower-half body
+     copy (already secondary text), dropping .lede to 4.07:1 and .problem-body
+     to 3.54:1 contrast, and created a stacking context that fought with
+     .price-card's own reflective ::after. The hierarchy step comes from the
+     color's alpha, not an extra layer on top. */
+}
+
+.elegant-section .tag-label {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  font-size: 10px;
+}
+
+.elegant-section .price-amount .num {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.elegant-section .price-amount .currency {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 600;
+}
+
+.elegant-section .price-tag {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.elegant-section .faq-question {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 600;
+}
+
+.elegant-section .faq-answer {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.elegant-section .disqualify-list li {
+  font-family: var(--font-inter), sans-serif;
+}

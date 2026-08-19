@@ -1,0 +1,73 @@
+/* ══════════════════════════════════════════
+   WORLD CLOCKS — three live clocks
+   Component WorldClocks.tsx. Footer, between the logo and the contact block.
+   Zero dependencies. Native Intl.DateTimeFormat.
+══════════════════════════════════════════ */
+
+/* Row grouping the three clocks */
+.world-clocks {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  /* Monospace so hours don't jump width going from 09 to 10 */
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* One label + time pair */
+.wc-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* City label */
+.wc-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Monospace time */
+.wc-time {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  /* Fixed width so layout doesn't jump on tick */
+  min-width: 3.6ch;
+}
+
+/* Separator between cities — thin vertical bar */
+.wc-sep {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 14px;
+  flex-shrink: 0;
+}
+
+/* Status dot — constant green to read as a live network */
+.wc-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+/* Mobile: adjust the layout of the clocks instead of hiding them */
+@media (max-width: 600px) {
+  .world-clocks {
+    width: 100%;
+    justify-content: center;
+    margin: 12px 0 4px 0;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+  .world-clocks .wc-sep {
+    display: none;
+  }
+}

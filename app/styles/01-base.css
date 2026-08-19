@@ -1,0 +1,311 @@
+/* Fonts self-hosted via next/font in layout.tsx. CSS vars --font-helvetica,
+   --font-montserrat, --font-inter, --font-cormorant are set on <html>. */
+
+/* No @tailwind directives: this project uses zero Tailwind utility classes
+   (custom CSS + inline styles only). Measured: 5.0kB gz with directives,
+   4.3kB gz without. Autoprefixer still runs (-webkit-backdrop-filter,
+   -webkit-mask, ::-moz-selection). */
+
+/* ═══════════════════════════════════════════
+   VEGROUP — NEXOVA Dark Cinematic Design System
+   ═══════════════════════════════════════════ */
+
+:root {
+  --accent-from: #d99e00;
+  --accent-to: #f5b813;
+
+  /* Only alphas reused more than once get tokenized. */
+  --accent-05: rgba(217, 158, 0, 0.05);
+  --accent-40: rgba(217, 158, 0, 0.4);
+
+  /* Page background. The hero/hangar veils use this same color with literal
+     alpha values instead of a token — not worth a color-mix()/duplicate var
+     per alpha. */
+  --bg: #050505;
+
+  /* Stepped surfaces: the system's main way to separate planes without
+     borders — darker = further back. */
+  --surface-1: #0a0a0a;
+  /* cards, 3D container faces */
+  --surface-1-hover: #111111;
+  /* hover state of those same cards */
+  --surface-2: #080808;
+  /* input panels, sidebar */
+  --surface-3: #060606;
+  /* results panel / viewport */
+
+  --champagne: rgba(232, 210, 170, 0.88);
+  --danger: #ef4444;
+
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-active: rgba(255, 255, 255, 0.18);
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.5);
+  /* .46, not lower: WCAG AA (4.5:1) on #050505 needs >=0.4529 alpha. */
+  --text-muted: rgba(255, 255, 255, 0.46);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text-primary);
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  font-family: var(--font-helvetica), Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Film grain + vignette ───────────────────────────────────────────────
+   Single layer, pure CSS, first child of <body> (layout.tsx). Not a client
+   component on purpose — zero JS cost before LCP.
+
+   z-index 99, not 9999: must stay below .nav-header (100), whose frosted
+   capsule would otherwise read the grain as dirt instead of film texture.
+
+   No mix-blend-mode: overlay/soft-light are near no-ops on mid-gray and
+   scale badly with background luminance (measured: <5/255 delta on the
+   page's #050505, but overlay blows out highlights on the hero video's
+   bright zones). `normal` gives a constant, background-independent texture.
+
+   Grain doesn't animate — would repaint the full viewport every frame — so
+   it's also absent from the reduced-motion block (nothing to turn off).
+
+   Side benefit: the noise dithers .hero-veil's 4-stop gradient by ~1 LSB,
+   just enough to break banding. */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  /* Vignette starts past 45% radius, reaches 40% black in the corners. */
+  background-image: radial-gradient(125% 125% at 50% 50%,
+      transparent 45%,
+      rgba(0, 0, 0, 0.16) 76%,
+      rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Noise: feTurbulence as a data-URI, 160px tile with stitchTiles='stitch'
+   for seamless repeat.
+
+   Three details tuned against the real bitmap (feTurbulence -> canvas ->
+   getImageData):
+   1. color-interpolation-filters='sRGB' — SVG defaults to linearRGB, which
+      converts mid-gray wrong and turns the tile into a light gray veil
+      instead of grain.
+   2. Noise goes in ALPHA, not RGB — feColorMatrix forces RGB to white and
+      routes turbulence luminance into alpha, so texture and black-level
+      lift are independent.
+   3. feFuncA slope 4 / intercept -1.7 stretches contrast to push the
+      texture/veil ratio up (0.13 -> 0.76).
+
+   Net effect at opacity: .032 on #050505: ~+2.4/255 black lift, ~±1.8/255
+   grain (1 LSB) — exactly the dithering .hero-veil's gradient needs without
+   looking dirty. */
+.film-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='g' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.33 0.33 0.33 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='4' intercept='-1.7'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
+}
+
+/* ── Liquid Glass Button ──────────────────── */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.liquid-glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.18);
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Animated gradient border ──────────────────────────────────────────────
+   Shares the mask-clip trick with .liquid-glass::before (two-layer
+   -webkit-mask + mask-composite: exclude), but this one is a rotating
+   conic-gradient, not a static vertical one.
+
+   USAGE RULE: max TWO elements on the page — today only .price-card.featured
+   uses it. A third turns this from a hierarchy signal into noise.
+
+   The ring draws INSIDE the element's existing 1px border, so the base
+   border still shows through the conic's transparent arc — reads as one
+   continuous edge with a traveling highlight, not a double border. */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* 1.5px, not .liquid-glass's 1.4px — this ring also rotates with card tilt. */
+  padding: 1.5px;
+  background: conic-gradient(from var(--angle),
+      transparent 0deg,
+      var(--accent-from) 50deg,
+      var(--accent-to) 90deg,
+      var(--accent-from) 130deg,
+      transparent 190deg,
+      transparent 360deg);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: gradient-border-spin 8s linear infinite;
+}
+
+/* Continuous sweep, not "arriving somewhere" — linear, no system easing. */
+@keyframes gradient-border-spin {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* ── Gradient CTA Button ─────────────────── */
+.btn-gradient {
+  background: linear-gradient(to right, var(--accent-from), var(--accent-to));
+  color: var(--bg);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-gradient:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ── Glass Card ──────────────────────────── */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--glass-border-active);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Section Layout ──────────────────────── */
+.section-pad {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-inline: clamp(20px, 5vw, 72px);
+}
+
+/* ── Tag / Label ─────────────────────────── */
+.tag-label {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ── Typography ──────────────────────────── */
+h1 {
+  font-size: clamp(48px, 7vw, 100px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.lede {
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: 52ch;
+}
+
+strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ── Glow Text ───────────────────────────── */
+.glow-text {
+  text-shadow:
+    0 0 80px rgba(217, 158, 0, 0.25),
+    0 0 160px rgba(217, 158, 0, 0.1);
+}

@@ -1,0 +1,178 @@
+/* ══════════════════════════════════════════
+   PROBLEM STEPPER — step-by-step "El Problema"
+   Replaces .problems-grid-v2 as the default view; the grid stays intact as
+   the "see all 4 at once" escape hatch.
+══════════════════════════════════════════ */
+.problem-stepper {
+  margin-top: 56px;
+}
+
+.problem-stepper-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.problem-stepper-dot {
+  appearance: none;
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 7px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.problem-stepper-dot:hover {
+  color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.problem-stepper-dot[data-done] {
+  color: var(--accent-from);
+  border-color: var(--accent-40);
+}
+
+.problem-stepper-dot[data-active] {
+  color: #050505;
+  background: linear-gradient(to right, var(--accent-from), var(--accent-to));
+  border-color: transparent;
+}
+
+.problem-stepper-stage {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* Single card, single element for background + radius. Previously the
+   background was split between .problem-stepper-stage and .problem-card-v2,
+   which left a mismatched ring in the rounded corners since the square card
+   didn't clip to the container's radius. */
+.problem-stepper-card {
+  min-height: 260px;
+  border-radius: 20px;
+  animation: problem-stepper-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Permanently "lit" like .problem-card-v2:hover on desktop — there's no
+     hover on mobile, which is exactly what this stepper is for, so the glow
+     can't depend on a mouse that isn't there. */
+  background: var(--surface-1-hover);
+}
+
+.problem-stepper-card .problem-num {
+  color: rgba(217, 158, 0, 0.22);
+}
+
+.problem-stepper-card .problem-line {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+@keyframes problem-stepper-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.problem-stepper-actions {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.problem-stepper-prompt {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.problem-stepper-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.problem-stepper-btn {
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  min-width: 76px;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.problem-stepper-btn:hover {
+  border-color: var(--accent-40);
+  color: var(--accent-from);
+}
+
+.problem-stepper-closing {
+  max-width: 640px;
+  margin-inline: auto;
+  border-radius: 20px;
+  background: var(--surface-1-hover);
+  padding: 56px 36px;
+  text-align: center;
+  animation: problem-stepper-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.problem-stepper-closing-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.problem-stepper-cta {
+  display: inline-flex;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 12px 28px;
+  border-radius: 9999px;
+}
+
+.problem-stepper-toggle {
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  display: block;
+  margin: 20px auto 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease;
+}
+
+.problem-stepper-toggle:hover {
+  color: var(--accent-from);
+}
+
+@media (max-width: 480px) {
+  .problem-stepper-actions {
+    justify-content: center;
+    text-align: center;
+  }
+}

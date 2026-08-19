@@ -1,0 +1,91 @@
+/* ── FAQ ─────────────────────────────────── */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: inherit;
+  text-align: left;
+  gap: 16px;
+  transition: color 0.2s ease;
+}
+
+.faq-question:hover {
+  color: var(--accent-from);
+}
+
+.faq-answer {
+  padding: 0 0 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.faq-ask {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-ask-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 72px;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.faq-ask-input:focus {
+  border-color: var(--accent-40);
+  background: rgba(217, 158, 0, 0.04);
+}
+
+.faq-ask-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.faq-ask-submit {
+  align-self: flex-start;
+  background: linear-gradient(to right, var(--accent-from), var(--accent-to));
+  color: #050505;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.faq-ask-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.faq-ask-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

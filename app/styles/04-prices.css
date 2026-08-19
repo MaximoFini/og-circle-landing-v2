@@ -1,0 +1,117 @@
+/* ── Prices ──────────────────────────────── */
+.prices-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 48px;
+}
+
+/* There used to be a @media (max-width: 768px) forcing 1fr here — unreachable,
+   since the 940px block below applies the same rule and covers every
+   viewport <=768px too. Removed. */
+
+.price-card {
+  padding: 40px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.price-card.featured {
+  border-color: rgba(217, 158, 0, 0.3);
+  background: var(--accent-05);
+}
+
+/* Fixes a latent bug: .featured inherits .glass-card's border and only
+   overrides border-color. But .glass-card:hover raised it back to
+   --glass-border-active (white 18%), so hovering the featured card lost its
+   amber identity right at peak purchase intent. Now hover raises the amber
+   instead of replacing it. */
+.price-card.featured:hover {
+  border-color: rgba(217, 158, 0, 0.45);
+}
+
+.price-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-from);
+}
+
+.price-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-amount .currency {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.price-amount .num {
+  font-size: clamp(56px, 7vw, 80px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.price-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.price-features li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding-left: 18px;
+  position: relative;
+}
+
+.price-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-from);
+  font-weight: 700;
+}
+
+.price-cta {
+  margin-top: auto;
+  padding: 14px 28px;
+  border-radius: 9999px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ── Disqualify list ─────────────────────── */
+.disqualify-list {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.disqualify-list li {
+  font-size: 15px;
+  color: var(--text-secondary);
+  padding-left: 20px;
+  position: relative;
+  list-style: none;
+}
+
+.disqualify-list li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: var(--danger);
+  font-weight: 700;
+}

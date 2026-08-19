@@ -1,0 +1,28 @@
+/* Split into app/styles/*.css, one file per page section, numbered in the
+   exact cascade order they had in the original single file. Splitting the
+   file doesn't change what ships: Next's CSS pipeline inlines these imports
+   into the same single bundle at build time. */
+
+@import "./styles/01-base.css";
+@import "./styles/02-numbers-bar.css";
+@import "./styles/03-nav.css";
+@import "./styles/04-prices.css";
+@import "./styles/05-faq.css";
+@import "./styles/06-story-footer.css";
+@import "./styles/07-triage.css";
+@import "./styles/09-problems-grid.css";
+@import "./styles/10-problem-stepper.css";
+@import "./styles/11-features-grid.css";
+@import "./styles/12-calculator.css";
+@import "./styles/14-elegant-section.css";
+@import "./styles/15-heading-reveal.css";
+@import "./styles/16-hero-motion.css";
+@import "./styles/17-tilt-lantern.css";
+@import "./styles/18-world-clocks.css";
+@import "./styles/19-marquee.css";
+/* Ported before 20-reduced-motion.css on purpose: that file's neutralizing
+   blocks (animation: none, etc.) must still win by source order against
+   any animation this ported CSS brings in. */
+@import "./styles/21-demo.css";
+@import "./styles/20-reduced-motion.css";
+@import "./styles/22-legal.css";
