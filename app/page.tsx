@@ -92,6 +92,7 @@ export default function Home() {
               <h1
                 className="glow-text"
                 style={{
+                  fontFamily: 'var(--font-helvetica)',
                   fontSize: 'clamp(36px, 6.5vw, 84px)',
                   fontWeight: 900,
                   lineHeight: 0.98,
