@@ -235,8 +235,18 @@
   z-index: 60;
 }
 
+/* Agrupa el toggle de audio y el hamburguesa como un solo flex child de
+   .nav-header (justify-content: space-between), asi quedan pegados entre si
+   en vez de separados por el space-between del nav. */
+.nav-mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 @media (min-width: 1024px) {
-  .mobile-toggle-btn {
+  .mobile-toggle-btn,
+  .nav-mobile-actions {
     display: none;
   }
 }
@@ -281,16 +291,6 @@ body.no-scroll {
 
 .mobile-nav-overlay a:hover {
   color: #fff;
-}
-
-.mobile-audio-toggle.mobile-audio-toggle {
-  width: 46px;
-  height: 46px;
-}
-
-.mobile-audio-toggle.mobile-audio-toggle svg {
-  width: 20px;
-  height: 20px;
 }
 
 /* NOTE: .problems-grid/.problem-card, .blueprint-*, .bp-* (BlueprintSteps

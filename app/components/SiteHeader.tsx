@@ -251,29 +251,35 @@ export default function SiteHeader() {
           </a>
         </div>
 
-        {/* Hamburger */}
-        <button
-          className="mobile-toggle-btn"
-          onClick={() => mobileMenuOpen ? closeMenu() : setMobileMenuOpen(true)}
-          aria-label="Menú"
-          style={{ zIndex: 60, position: 'relative' }}
-        >
-          <span style={{
-            position: 'absolute',
-            transition: 'opacity 0.3s ease, transform 0.3s ease',
-            opacity: mobileMenuOpen ? 1 : 0,
-            transform: mobileMenuOpen ? 'rotate(0deg) scale(1)' : 'rotate(-90deg) scale(0.75)',
-          }}>
-            <X size={24} />
-          </span>
-          <span style={{
-            transition: 'opacity 0.3s ease, transform 0.3s ease',
-            opacity: mobileMenuOpen ? 0 : 1,
-            transform: mobileMenuOpen ? 'rotate(90deg) scale(0.75)' : 'rotate(0deg) scale(1)',
-          }}>
-            <Menu size={24} />
-          </span>
-        </button>
+        {/* Mobile: audio toggle a la izquierda del hamburguesa. Agrupados en
+            un solo flex child para que .nav-header (justify-content:
+            space-between) no los separe como si fueran items independientes. */}
+        <div className="nav-mobile-actions">
+          <AmbientAudio className="nav-audio-toggle-mobile" />
+
+          <button
+            className="mobile-toggle-btn"
+            onClick={() => mobileMenuOpen ? closeMenu() : setMobileMenuOpen(true)}
+            aria-label="Menú"
+            style={{ zIndex: 60, position: 'relative' }}
+          >
+            <span style={{
+              position: 'absolute',
+              transition: 'opacity 0.3s ease, transform 0.3s ease',
+              opacity: mobileMenuOpen ? 1 : 0,
+              transform: mobileMenuOpen ? 'rotate(0deg) scale(1)' : 'rotate(-90deg) scale(0.75)',
+            }}>
+              <X size={24} />
+            </span>
+            <span style={{
+              transition: 'opacity 0.3s ease, transform 0.3s ease',
+              opacity: mobileMenuOpen ? 0 : 1,
+              transform: mobileMenuOpen ? 'rotate(90deg) scale(0.75)' : 'rotate(0deg) scale(1)',
+            }}>
+              <Menu size={24} />
+            </span>
+          </button>
+        </div>
       </nav>
 
       {/* ── Mobile Overlay ─────────────────────── */}
@@ -323,23 +329,6 @@ export default function SiteHeader() {
           >
             Quiero Aprender
           </a>
-
-          {/* Icono de sonido en el menú hamburguesa móvil */}
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '10px',
-              transition: 'opacity 0.4s ease, transform 0.4s ease',
-              opacity: menuVisible ? 1 : 0,
-              transform: menuVisible ? 'translateY(0)' : 'translateY(12px)',
-              transitionDelay: menuVisible ? `${350 + (NAV_LINKS.length + 1) * 50}ms` : '0ms',
-            }}
-          >
-            <AmbientAudio className="mobile-audio-toggle" />
-          </div>
         </div>
       )}
     </>
