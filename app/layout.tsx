@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Inter, Montserrat } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
+import { SITE_URL } from './lib/site';
 
 const helveticaNow = localFont({
   src: './fonts/HelveticaNowVar.woff2',
@@ -32,13 +33,29 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'VEGROUP — Importá desde cualquier parte del mundo',
   description: 'Aprendé a importar desde China, EE.UU. y Europa con el método probado de VEGROUP. Calculadora de costos, acompañamiento real y acceso a nuestra red de proveedores.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'VEGROUP — Importá desde cualquier parte del mundo',
     description: 'El método para importar que ya usaron cientos de personas en Argentina.',
     type: 'website',
+    url: '/',
+    siteName: 'VEGROUP',
+    locale: 'es_AR',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VEGROUP — Importá desde cualquier parte del mundo',
+    description: 'El método para importar que ya usaron cientos de personas en Argentina.',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#050505',
 };
 
 export default function RootLayout({
@@ -61,6 +78,11 @@ export default function RootLayout({
             en viewports anchos via dynamic(ssr:false). En mobile este
             preload no compite con recursos criticos. */}
         <link rel="preload" as="image" href="/textures/moon-2k.jpg" fetchPriority="low" />
+
+        {/* apple-icon.svg no es una convencion reconocida por Next (solo
+            png/jpg) — se sirve como asset estatico en /public y se linkea
+            a mano. */}
+        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
       </head>
       <body>
         {/* C1 — Grano de pelicula + viñeta. Primer hijo del <body> y no de

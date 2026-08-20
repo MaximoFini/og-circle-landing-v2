@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
+import { SITE_URL } from './lib/site';
 
-// No hay sitemap.xml todavia (no era parte de este cambio) — agregar el
-// campo `sitemap` aca cuando exista app/sitemap.ts, para no apuntar a un 404.
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -9,5 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/api/',
     },
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

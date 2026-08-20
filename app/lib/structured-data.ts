@@ -1,9 +1,6 @@
 import { SITE_URL } from './site';
 import { FAQS } from '../data/faqs';
 
-// @graph con lo que existe realmente en la landing hoy: sin logo/sameAs
-// (no hay assets de marca ni redes linkeadas en el sitio) para no declarar
-// propiedades que no se puedan verificar contra el contenido visible.
 export function buildStructuredData() {
   return {
     '@context': 'https://schema.org',
@@ -14,6 +11,13 @@ export function buildStructuredData() {
         url: SITE_URL,
         description:
           'Curso de importación desde China, Miami y España, con red de proveedores facilitada para armar un e-commerce en Argentina.',
+        sameAs: ['https://www.instagram.com/vegroup_courier/'],
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Amenábar 2049',
+          addressLocality: 'Belgrano, CABA',
+          addressCountry: 'AR',
+        },
       },
       {
         '@type': 'FAQPage',

@@ -400,6 +400,9 @@ export default function Home() {
               <span className="footer-logo-sub">by VeGroup</span>
             </a>
             <span className="footer-copy">© 2026 VeGroup</span>
+            <span className="footer-attribution">
+              Textura lunar: NASA / Solar System Scope (CC BY 4.0)
+            </span>
             <span className="footer-links">
               <Link href="/terminos" style={{ color: 'rgba(255,255,255,0.35)', transition: 'color 0.2s' }}>Términos y Condiciones</Link>
               {' · '}
