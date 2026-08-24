@@ -92,6 +92,18 @@
   letter-spacing: 0.12em;
   color: #fff;
   display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo-icon {
+  flex-shrink: 0;
+  height: 40px;
+  width: auto;
+}
+
+.footer-logo-text {
+  display: flex;
   flex-direction: column;
   gap: 2px;
 }

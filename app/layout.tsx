@@ -78,11 +78,6 @@ export default function RootLayout({
             en viewports anchos via dynamic(ssr:false). En mobile este
             preload no compite con recursos criticos. */}
         <link rel="preload" as="image" href="/textures/moon-2k.jpg" fetchPriority="low" />
-
-        {/* apple-icon.svg no es una convencion reconocida por Next (solo
-            png/jpg) — se sirve como asset estatico en /public y se linkea
-            a mano. */}
-        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
       </head>
       <body>
         {/* C1 — Grano de pelicula + viñeta. Primer hijo del <body> y no de

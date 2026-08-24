@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import AmbientAudio from './AmbientAudio';
 import { OPEN_DEMO_EVENT } from './DemoModal';
@@ -215,6 +216,7 @@ export default function SiteHeader() {
 
         {/* Logo */}
         <a href="#top" className="nav-logo" onClick={closeMenu}>
+          <Image src="/images/logo-icon.png" alt="" width={28} height={32} className="nav-logo-icon" priority />
           <span>
             OG CIRCLE
             <span className="nav-logo-by">by VeGroup</span>

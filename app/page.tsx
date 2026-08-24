@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Users } from 'lucide-react';
 import SiteHeader from './components/SiteHeader';
@@ -396,8 +397,11 @@ export default function Home() {
         <div className="wrap footer-content">
           <div className="footer-brand">
             <a href="#top" className="footer-logo">
-              OG CIRCLE
-              <span className="footer-logo-sub">by VeGroup</span>
+              <Image src="/images/logo-icon.png" alt="" width={36} height={41} className="footer-logo-icon" />
+              <span className="footer-logo-text">
+                OG CIRCLE
+                <span className="footer-logo-sub">by VeGroup</span>
+              </span>
             </a>
             <span className="footer-copy">© 2026 VeGroup</span>
             <span className="footer-attribution">

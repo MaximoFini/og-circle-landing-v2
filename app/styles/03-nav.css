@@ -120,8 +120,14 @@
   letter-spacing: 0.12em;
   color: #fff;
   display: flex;
-  align-items: flex-start;
-  gap: 3px;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo-icon {
+  flex-shrink: 0;
+  height: 32px;
+  width: auto;
 }
 
 .nav-logo-by {
