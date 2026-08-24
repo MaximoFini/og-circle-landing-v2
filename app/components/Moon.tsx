@@ -1,8 +1,33 @@
 'use client';
 
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Component, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
+
+/**
+ * La textura a veces falla en cargar (blip de red/dev-server) y sin este
+ * boundary el error escapa del Canvas y tira abajo toda la pagina (la
+ * ErrorBoundary interna de r3f solo absorbe el primer throw, no reintentos
+ * posteriores). Es un adorno del hero: ante fallo, se omite en silencio en
+ * vez de romper el resto del sitio.
+ */
+class MoonErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Moon: no se pudo cargar la textura, se omite el adorno.', error);
+    }
+  }
+
+  render() {
+    return this.state.hasError ? null : this.props.children;
+  }
+}
 
 /**
  * Luna real, no dibujada: esfera de Three.js con la textura fotografica de la
@@ -78,9 +103,11 @@ export default function Moon() {
     >
       <ambientLight intensity={0.35} />
       <directionalLight position={[-3, 1.4, 2.5]} intensity={2.4} color="#fff8ea" />
-      <Suspense fallback={null}>
-        <MoonSphere spin={true} />
-      </Suspense>
+      <MoonErrorBoundary>
+        <Suspense fallback={null}>
+          <MoonSphere spin={true} />
+        </Suspense>
+      </MoonErrorBoundary>
     </Canvas>
   );
 }
