@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Términos y Condiciones — OG Circle by VeGroup',
+  title: 'Términos y Condiciones — OG Circle by VEGROUP',
   description: 'Términos y condiciones de uso y compra de OG Circle by VeGroup.',
   robots: { index: false, follow: true },
 };

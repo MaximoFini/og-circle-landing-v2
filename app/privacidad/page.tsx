@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Política de Privacidad — OG Circle by VeGroup',
+  title: 'Política de Privacidad — OG Circle by VEGROUP',
   description: 'Política de privacidad y tratamiento de datos personales de OG Circle by VeGroup.',
   robots: { index: false, follow: true },
 };
