@@ -431,6 +431,16 @@ export default function Home() {
             </span>
           </div>
         </div>
+
+        <a
+          href="https://wa.me/5493534271739"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-credit"
+        >
+          <span className="footer-credit-label">Desarrollado por</span>{' '}
+          <span className="footer-credit-brand">KEI Software</span>
+        </a>
       </footer>
 
       <WhatsAppFloat />
