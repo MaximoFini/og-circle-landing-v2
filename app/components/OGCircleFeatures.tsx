@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import TiltGrid from './TiltGrid';
 
 /**
- * OG Circle — la guia que dirige la mirada por las 6 features.
+ * OG Circle — la guia que dirige la mirada por las 8 features.
  *
  * Mobile (<=560px): scroll-driven. Un IntersectionObserver banda el centro
  * del viewport (mismo patron que la seccion activa del nav en SiteHeader) y
@@ -14,7 +14,7 @@ import TiltGrid from './TiltGrid';
  *
  * Desktop (>=901px): un tour automatico, UNA sola vez, disparado al entrar
  * la seccion en viewport (mismo patron "un reveal, una vez" que ya usa
- * `SectionReveal`). El avion recorre las 6 en un trazo curvo (spline de
+ * `SectionReveal`). El avion recorre las 8 en un trazo curvo (spline de
  * Catmull-Rom con un "bulge" aleatorio por tramo — nunca la misma curva dos
  * veces) medido de la posicion REAL de las cards. El highlight NO se agenda
  * con timers a tiempo fijo: un loop de `requestAnimationFrame` lee la
@@ -44,6 +44,7 @@ const FEATURES = [
   { num: '05', cat: 'SOPORTE LOCAL', title: 'Red de Profesionales', body: 'Contacto directo con despachantes, contadores expertos en comercio exterior y asesores de automatización.' },
   { num: '06', cat: 'LOGÍSTICA', title: 'Tracking en Tiempo Real', body: 'Monitoreo digital de tu mercadería consolidada, desde bodega hasta Belgrano, CABA.' },
   { num: '07', cat: 'COMUNIDAD', title: 'Grupo Privado de Importadores', body: 'Networking real con todos los miembros de OG Circle, compartiendo proveedores, resolviendo consultas en tiempo real y consolidando pedidos.' },
+  { num: '08', cat: 'FINANZAS', title: 'Crossborder Financiero', body: 'Vías validadas para pagarles a tus proveedores en el exterior sin trabas cambiarias: cuentas multimoneda, tipo de cambio real y tiempos de acreditación que no te frenan la producción.' },
 ] as const;
 
 const TOTAL = FEATURES.length;
@@ -73,7 +74,7 @@ type Point = { x: number; y: number };
 
 /**
  * Spline de Catmull-Rom con un "bulge" aleatorio por tramo: pasa exacto por
- * los 6 puntos medidos (nunca se aleja del centro real de una card), pero la
+ * los 8 puntos medidos (nunca se aleja del centro real de una card), pero la
  * curva ENTRE puntos se hincha para un lado u otro al azar — nunca la misma
  * forma dos veces, que es justo lo que pide "que no se sienta tan
  * deterministico". El bulge es perpendicular al segmento, escalado a su
@@ -209,7 +210,7 @@ export default function OGCircleFeatures() {
     };
   }, []);
 
-  // ── Desktop: medir las 6 cards y armar la curva (una sola vez) ──────────
+  // ── Desktop: medir las 8 cards y armar la curva (una sola vez) ──────────
   const measure = useCallback((): { points: Point[]; width: number; height: number } | null => {
     const wrap = wrapRef.current;
     if (!wrap) return null;
@@ -338,7 +339,7 @@ export default function OGCircleFeatures() {
   return (
     <div className="og-circle-wrap" ref={wrapRef}>
       {/* Riel lateral — solo visible <=560px via CSS. Distribucion aproximada
-          (space-around sobre la altura total), no medida: las 6 cards son de
+          (space-around sobre la altura total), no medida: las 8 cards son de
           alto similar y una desviacion de unos px en un elemento puramente
           decorativo no vale medirla con JS. */}
       <div className="og-rail" aria-hidden="true">
@@ -354,7 +355,7 @@ export default function OGCircleFeatures() {
             className="feature-card-v2"
             data-tilt
             data-og-active={activeIndex === i ? '' : undefined}
-            data-wide={i === FEATURES.length - 1 ? '' : undefined}
+            data-half={i >= FEATURES.length - 2 ? '' : undefined}
             ref={(el) => {
               cardRefs.current[i] = el;
             }}

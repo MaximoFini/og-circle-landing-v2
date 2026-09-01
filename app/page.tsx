@@ -102,7 +102,7 @@ export default function Home() {
                   maxWidth: '19ch',
                 }}
               >
-                Aprendé a importar de China, Miami o España y armar tu e-commerce en Argentina.
+                Aprendé a importar de China y armar tu e-commerce en Argentina.
               </h1>
 
               <div className="hero-cta-wrapper">

@@ -1,25 +1,41 @@
 /* ══════════════════════════════════════════
    FEATURES GRID V2
 ══════════════════════════════════════════ */
+/* 6 columnas base (en vez de 3) para poder darle a las ultimas dos cards
+   (data-half) exactamente mitad de fila en desktop via grid-column: span 3,
+   algo que un grid de 3 columnas no puede expresar en unidades enteras. Las
+   cards normales ocupan span 2 (2/6 = misma 1/3 de siempre). */
 .features-grid-v2 {
   margin-top: 56px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 1px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 20px;
   overflow: hidden;
 }
 
+.feature-card-v2 {
+  grid-column: span 2;
+}
+
+.feature-card-v2[data-half] {
+  grid-column: span 3;
+}
+
 @media (max-width: 900px) {
-  .features-grid-v2 {
-    grid-template-columns: repeat(2, 1fr);
+  .feature-card-v2 {
+    grid-column: span 3;
+  }
+
+  .feature-card-v2[data-half] {
+    grid-column: span 6;
   }
 }
 
 @media (max-width: 560px) {
-  .features-grid-v2 {
-    grid-template-columns: 1fr;
+  .feature-card-v2 {
+    grid-column: span 6;
   }
 }
 
@@ -270,42 +286,6 @@
   color: rgba(255, 255, 255, 0.45);
   line-height: 1.7;
   max-width: 36ch;
-}
-
-/* Card 07 — Comunidad. Spans the full 3-column width, horizontal layout on
-   desktop so the wide canvas reads as intentional rather than stretched. */
-.feature-card-v2[data-wide] {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 901px) {
-  .feature-card-v2[data-wide] {
-    flex-direction: row;
-    align-items: center;
-    gap: 48px;
-    padding: 44px 48px;
-  }
-
-  /* Pull the big number back into flow for the horizontal layout — it becomes
-     the visual anchor on the right instead of an absolute ghost in the corner. */
-  .feature-card-v2[data-wide] .feature-num-big {
-    position: relative;
-    top: auto;
-    right: auto;
-    flex-shrink: 0;
-    margin-left: auto;
-    font-size: 96px;
-    color: rgba(217, 158, 0, 0.07);
-  }
-
-  .feature-card-v2[data-wide]:hover .feature-num-big,
-  .feature-card-v2[data-wide][data-og-active] .feature-num-big {
-    color: rgba(217, 158, 0, 0.14);
-  }
-
-  .feature-card-v2[data-wide] .feature-body {
-    max-width: 52ch;
-  }
 }
 
 /* .feature-shine's actual definition (cursor-following radial, shared with

@@ -44,7 +44,7 @@ import { useEffect, useRef, useState } from 'react';
  */
 
 const NUMBERS = [
-  { value: '6', label: 'Agentes verificados en China' },
+  { value: '6', label: 'Agentes de compra verificados en China' },
   { value: '3', label: 'Depósitos: Miami, China, España' },
   { value: '+5', label: 'Profesionales al servicio' },
 ];
