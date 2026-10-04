@@ -44,7 +44,7 @@ const FEATURES = [
   { num: '05', cat: 'SOPORTE LOCAL', title: 'Red de Profesionales', body: 'Contacto directo con despachantes, contadores expertos en comercio exterior y asesores de automatización.' },
   { num: '06', cat: 'LOGÍSTICA', title: 'Tracking en Tiempo Real', body: 'Monitoreo digital de tu mercadería consolidada, desde bodega hasta Belgrano, CABA.' },
   { num: '07', cat: 'COMUNIDAD', title: 'Grupo Privado de Importadores', body: 'Networking real con todos los miembros de OG Circle, compartiendo proveedores, resolviendo consultas en tiempo real y consolidando pedidos.' },
-  { num: '08', cat: 'FINANZAS', title: 'Crossborder Financiero', body: 'Vías validadas para pagarles a tus proveedores en el exterior sin trabas cambiarias: cuentas multimoneda, tipo de cambio real y tiempos de acreditación que no te frenan la producción.' },
+  { num: '08', cat: 'FINANZAS', title: 'Cross-border Financiero', body: 'Vías validadas para pagarles a tus proveedores en el exterior sin trabas cambiarias: cuentas multimoneda, tipo de cambio real y tiempos de acreditación que no te frenan la producción.' },
 ] as const;
 
 const TOTAL = FEATURES.length;

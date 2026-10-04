@@ -6,6 +6,8 @@ import { SITE_URL } from './lib/site';
 
 const helveticaNow = localFont({
   src: './fonts/HelveticaNowVar.woff2',
+  // Subset (latin + latin-ext, wdth pinned, wght 300-900) — see git history for the original.
+  weight: '300 900',
   display: 'swap',
   variable: '--font-helvetica',
 });
@@ -73,11 +75,6 @@ export default function RootLayout({
         {/* Video del hero: preconnect para arrancar la conexion TCP+TLS
             durante el parseo del HTML. */}
         <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
-
-        {/* Moon texture: fetchpriority low porque Moon.tsx solo monta
-            en viewports anchos via dynamic(ssr:false). En mobile este
-            preload no compite con recursos criticos. */}
-        <link rel="preload" as="image" href="/textures/moon-2k.jpg" fetchPriority="low" />
       </head>
       <body>
         {/* C1 — Grano de pelicula + viñeta. Primer hijo del <body> y no de

@@ -59,7 +59,8 @@ function MoonSphere({ spin }: { spin: boolean }) {
 
 /**
  * El canvas WebGL no se monta hasta el efecto (evita costo en SSR/primer
- * paint) y directamente no se monta en pantallas chicas — es un adorno del
+ * paint) y directamente no se monta en pantallas chicas (lo gatea
+ * `MoonLoader`, que ni siquiera descarga este modulo) — es un adorno del
  * hero, no vale la GPU de un telefono de gama baja. Bajo
  * `prefers-reduced-motion` se monta pero congelado (frameloop 'demand', sin
  * rotacion): sigue siendo una luna real, solo que quieta.
@@ -71,6 +72,8 @@ function MoonSphere({ spin }: { spin: boolean }) {
 export default function Moon() {
   const [ready, setReady] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -86,14 +89,25 @@ export default function Moon() {
     };
   }, []);
 
+  // El hero sale de pantalla al scrollear: sin esto el rAF de three sigue
+  // renderizando la luna 24/7 aunque nadie la vea.
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ready]);
+
   if (!ready) return null;
 
   return (
+    <div ref={wrapRef} style={{ width: '100%', height: '100%' }}>
     <Canvas
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       camera={{ position: [0, 0, 5.5], fov: 28 }}
       gl={{ alpha: true, antialias: true, powerPreference: 'low-power' }}
-      frameloop="always"
+      frameloop={visible && !reduceMotion ? 'always' : 'demand'}
       onCreated={({ gl, scene, camera }) => {
         // Forzar un render inicial para que el loop de RAF arranque de inmediato
         // en mobile, donde los navegadores throttlean RAF hasta la primera
@@ -105,9 +119,10 @@ export default function Moon() {
       <directionalLight position={[-3, 1.4, 2.5]} intensity={2.4} color="#fff8ea" />
       <MoonErrorBoundary>
         <Suspense fallback={null}>
-          <MoonSphere spin={true} />
+          <MoonSphere spin={!reduceMotion} />
         </Suspense>
       </MoonErrorBoundary>
     </Canvas>
+    </div>
   );
 }

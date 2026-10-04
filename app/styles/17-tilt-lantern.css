@@ -252,12 +252,10 @@
     display: none;
   }
 
+  /* The WebGL moon is not loaded on phones (MoonLoader.tsx), so hide the
+     empty container and its animated glow. */
   .hero-moon {
-    top: 256px;
-    left: 85%;
-    transform: translateX(-50%);
-    width: 70px;
-    height: 70px;
+    display: none;
   }
 
   .hero-cta-wrapper {

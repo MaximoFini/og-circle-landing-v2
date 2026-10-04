@@ -8,12 +8,11 @@ import WhatsAppFloat from './components/WhatsAppFloat';
 import NumbersBar from './components/NumbersBar';
 import SectionReveal from './components/SectionReveal';
 import HeroVideo from './components/HeroVideo';
+import MoonLoader from './components/MoonLoader';
 import { buildStructuredData } from './lib/structured-data';
 
-/* Canvas de Three.js: nunca se pre-renderiza en el servidor (no tiene
-   sentido, es WebGL) y se carga como chunk separado — `three` +
-   `@react-three/fiber` no deberian entrar al bundle del render inicial. */
-const Moon = dynamic(() => import('./components/Moon'), { ssr: false });
+/* Canvas de Three.js: `MoonLoader` difiere el import() de `Moon` (three +
+   r3f) hasta despues de `load`, solo en pantallas anchas. */
 
 /* Below-the-fold: se code-splitean en chunks separados para que su JS
    no bloquee el primer paint. El HTML se sigue renderizando en el
@@ -65,7 +64,7 @@ export default function Home() {
               direccional que calcula el terminador de verdad. */}
           <div className="hero-layer hero-layer--sky" aria-hidden="true">
             <div className="hero-moon">
-              <Moon />
+              <MoonLoader />
             </div>
             <span className="comet comet--a" />
             <span className="comet comet--b" />
@@ -249,6 +248,32 @@ export default function Home() {
               {/* La demo real vive acá, pegada a la grilla que ya la lista como
                 el beneficio 02 — no es su propia seccion, es una de las 6. */}
               <CostCalculator />
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════════
+            PARTNERS — entre "lo que ponemos a disposición" (OG Circle) y
+            "Quiénes somos": respalda las features de Cross-border Financiero
+            y Tracking antes de pasar a la parte de confianza/fundadores.
+        ══════════════════════════════════════════ */}
+          <section className="section-pad" id="partners">
+            <div className="wrap">
+              <span className="tag-label">Partners</span>
+              <h2 style={{ marginBottom: '32px' }}>Con quiénes trabajamos</h2>
+              <ul className="partners-grid">
+                <li className="partner-card glass-card">
+                  <div className="partner-logo">
+                    <Image src="/images/partner-belo.webp" alt="Belo" width={498} height={261} sizes="(max-width: 640px) 60vw, 220px" />
+                  </div>
+                  <p className="partner-role">Cross-border financiero</p>
+                </li>
+                <li className="partner-card glass-card">
+                  <div className="partner-logo">
+                    <Image src="/images/partner-traxcargo.webp" alt="Traxcargo" width={449} height={163} sizes="(max-width: 640px) 60vw, 220px" />
+                  </div>
+                  <p className="partner-role">Sistema de trackeo internacional</p>
+                </li>
+              </ul>
             </div>
           </section>
 

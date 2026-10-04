@@ -38,7 +38,7 @@ export default function AmbientAudio({ className = '' }: { className?: string })
 
   return (
     <>
-      <audio ref={audioRef} src="/audio/hero-theme.mp3" loop preload="metadata" muted={!playing} />
+      <audio ref={audioRef} src="/audio/hero-theme.mp3" loop preload="none" muted={!playing} />
       <button
         type="button"
         onClick={toggle}

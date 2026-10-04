@@ -11,6 +11,11 @@ import { useEffect, useRef, useState } from 'react';
  *   2. Cuando el video tiene datos suficientes (evento `canplay`)
  *   3. Al primer touchstart/click/scroll del usuario
  *   4. Al volver a la pestaña (Visibility API)
+ *
+ * Ademas se pausa cuando el hero sale por completo del viewport (un video a
+ * pantalla completa con filter + overscan sigue decodificando y componiendo
+ * aunque nadie lo vea) y se reanuda al volver. Solo pausa/reanuda lo que
+ * este mismo efecto pauso: no toca el flujo de autoplay fallido.
  */
 export default function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,6 +26,8 @@ export default function HeroVideo() {
     if (!video) return;
 
     let resolved = false;
+    let inView = true;
+    let pausedByObserver = false;
 
     const markOk = () => {
       resolved = true;
@@ -28,7 +35,7 @@ export default function HeroVideo() {
     };
 
     const tryPlay = () => {
-      if (!video.paused) return;
+      if (!video.paused || !inView) return;
       video.play().then(markOk).catch(() => {});
     };
 
@@ -56,8 +63,24 @@ export default function HeroVideo() {
     };
     document.addEventListener('visibilitychange', handleVisibility);
 
+    // 5. Pausar fuera del viewport, reanudar al volver
+    const io = new IntersectionObserver((entries) => {
+      // Si el navegador junta varios cambios en un callback, vale el ultimo.
+      const entry = entries[entries.length - 1];
+      inView = entry.isIntersecting;
+      if (!inView && !video.paused) {
+        video.pause();
+        pausedByObserver = true;
+      } else if (inView && pausedByObserver) {
+        pausedByObserver = false;
+        video.play().catch(() => {});
+      }
+    });
+    io.observe(video);
+
     return () => {
       document.removeEventListener('visibilitychange', handleVisibility);
+      io.disconnect();
     };
   }, []);
 
