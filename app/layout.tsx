@@ -36,22 +36,22 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: 'VEGROUP — Importá desde cualquier parte del mundo',
+  title: 'OG Circle by VEGROUP — Importá desde cualquier parte del mundo',
   description: 'Aprendé a importar desde China, EE.UU. y Europa con el método probado de VEGROUP. Calculadora de costos, acompañamiento real y acceso a nuestra red de proveedores.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'VEGROUP — Importá desde cualquier parte del mundo',
+    title: 'OG Circle by VEGROUP — Importá desde cualquier parte del mundo',
     description: 'El método para importar que ya usaron cientos de personas en Argentina.',
     type: 'website',
     url: '/',
-    siteName: 'VEGROUP',
+    siteName: 'OG Circle by VEGROUP',
     locale: 'es_AR',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'VEGROUP — Importá desde cualquier parte del mundo',
+    title: 'OG Circle by VEGROUP — Importá desde cualquier parte del mundo',
     description: 'El método para importar que ya usaron cientos de personas en Argentina.',
   },
 };
