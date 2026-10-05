@@ -9,6 +9,7 @@ import NumbersBar from './components/NumbersBar';
 import SectionReveal from './components/SectionReveal';
 import HeroVideo from './components/HeroVideo';
 import MoonLoader from './components/MoonLoader';
+import { registroHref } from './lib/site';
 import { buildStructuredData } from './lib/structured-data';
 
 /* Canvas de Three.js: `MoonLoader` difiere el import() de `Moon` (three +
@@ -106,7 +107,7 @@ export default function Home() {
 
               <div className="hero-cta-wrapper">
                 <a
-                  href="#problema"
+                  href={registroHref('landing-hero')}
                   className="liquid-glass"
                   style={{
                     color: '#fff',
@@ -351,7 +352,7 @@ export default function Home() {
                     <li>Acceso a red de profesionales</li>
                     <li>Soporte de servicios financieros básicos</li>
                   </ul>
-                  <a href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer" className="price-cta liquid-glass" style={{ color: '#fff', display: 'block', textAlign: 'center', padding: '14px', borderRadius: '12px', fontWeight: 600, fontSize: '13px', letterSpacing: '0.06em' }}>
+                  <a href={registroHref('landing-precios-principiante')} className="price-cta liquid-glass" style={{ color: '#fff', display: 'block', textAlign: 'center', padding: '14px', borderRadius: '12px', fontWeight: 600, fontSize: '13px', letterSpacing: '0.06em' }}>
                     Anotarme en Principiante
                   </a>
                 </div>
@@ -376,7 +377,7 @@ export default function Home() {
                     <li>Flete + despacho gestionado por VeGroup</li>
                     <li>Tracking internacional & cuenta cambiaria SWIFT</li>
                   </ul>
-                  <a href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer" className="price-cta btn-gradient" style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, letterSpacing: '0.06em', color: '#050505' }}>
+                  <a href={registroHref('landing-precios-avanzado')} className="price-cta btn-gradient" style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, letterSpacing: '0.06em', color: '#050505' }}>
                     Anotarme en Avanzado →
                   </a>
                 </div>
