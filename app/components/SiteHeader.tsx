@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import AmbientAudio from './AmbientAudio';
 import { OPEN_DEMO_EVENT } from './DemoModal';
+import { registroHref } from '../lib/site';
 
 /**
  * Los unicos anclas del nav. `#no-es-para-vos` existe como seccion en
@@ -246,7 +247,7 @@ export default function SiteHeader() {
         <div className="nav-cta-group">
           <AmbientAudio className="nav-audio-toggle" />
           <a
-            href="#pilares-servicio"
+            href={registroHref('landing-nav')}
             className="nav-cta"
           >
             Quiero Aprender
@@ -312,7 +313,7 @@ export default function SiteHeader() {
           ))}
 
           <a
-            href="#pilares-servicio"
+            href={registroHref('landing-menu-mobile')}
             className="mobile-nav-cta"
             onClick={closeMenu}
             style={{
