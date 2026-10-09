@@ -103,16 +103,27 @@
 
 .disqualify-list li {
   font-size: 15px;
+  line-height: 1.5;
   color: var(--text-secondary);
-  padding-left: 20px;
+  padding-left: 32px;
   position: relative;
   list-style: none;
 }
 
+/* Thin X inside a faint ring instead of the bold '✗' glyph, which rendered
+   inconsistently across fonts and read as cheap. The X is an inline SVG so
+   it needs no extra markup; top centers the 18px ring on the first line. */
 .disqualify-list li::before {
-  content: '✗';
+  content: '';
   position: absolute;
   left: 0;
-  color: var(--danger);
-  font-weight: 700;
+  top: calc(0.75em - 9px);
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.06)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f87171' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M8 8l8 8M16 8l-8 8'/%3E%3C/svg%3E")
+    center / 12px 12px no-repeat;
 }
