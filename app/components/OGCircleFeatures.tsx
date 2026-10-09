@@ -57,7 +57,7 @@ const FEATURES: ReadonlyArray<{ num: string; icons: LucideIcon[]; title: string;
   { num: '01', icons: [GraduationCap], title: 'Formación', body: 'Importaciones Courier y Marítimas. E-commerce y ADS. Videos prácticos, paso a paso.' },
   { num: '02', icons: [Calculator], title: 'Calculadora de Costos', body: '10.502 NCM + 33.025 posiciones SIM. Estimá aranceles, despacho y costo final antes de comprar.' },
   { num: '03', icons: [Warehouse], title: 'Infraestructura', body: 'Casilleros y depósitos en Guangzhou, Miami y Barcelona para recibir y consolidar cargas.' },
-  { num: '04', icons: [Handshake], title: 'Agentes en China', body: 'Acceso a 6 agentes verificados. Búsqueda de productos, muestras, negociación y control de calidad.' },
+  { num: '04', icons: [Handshake], title: 'Agentes en China', body: 'Acceso a agentes verificados. Búsqueda de productos, muestras, negociación y control de calidad.' },
   { num: '05', icons: [Users], title: 'Red de Profesionales', body: 'Contactos de despachantes, contadores y especialistas en comercio exterior.' },
   { num: '06', icons: [Plane, Ship], title: 'Logística Internacional', body: 'Flete aéreo y marítimo gestionado por VeGroup, con seguimiento internacional.' },
   { num: '07', icons: [MessageSquareMore, UsersRound], title: 'Comunidad y Soporte', body: 'Grupo privado de importadores, actualizaciones, soporte 24/7 y una clase grupal semanal.' },
