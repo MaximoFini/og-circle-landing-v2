@@ -28,8 +28,9 @@
 .route-ticker-track {
   display: flex;
   width: max-content;
-  /* 40s: slow and elegant, not urgent */
-  animation: ticker-scroll 40s linear infinite;
+  /* 120s = 40s per city pass x3 repeats per group (page.tsx TICKER_REPEAT):
+     same slow pace, and each group outruns any viewport so no gap shows. */
+  animation: ticker-scroll 120s linear infinite;
   gap: 0;
 }
 

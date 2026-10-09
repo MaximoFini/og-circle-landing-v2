@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Fragment } from 'react';
 import { ArrowRight, Users } from 'lucide-react';
 import SiteHeader from './components/SiteHeader';
 import HeroParallax from './components/HeroParallax';
@@ -33,6 +34,17 @@ Desde: China / Miami / España
 Peso aproximado: `;
 
 const WHATSAPP_HREF = `https://wa.me/5491176392303?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
+// Ticker de rutas (debajo del hero). Con 3 repeticiones cada grupo mide
+// ~3000px; la duracion en 19-marquee.css esta escalada para mantener la
+// misma velocidad que tenia con una sola pasada.
+const TICKER_CITIES = [
+  { city: 'Guangzhou', ref: 'China' },
+  { city: 'Miami', ref: 'Florida · USA' },
+  { city: 'Barcelona', ref: 'España' },
+  { city: 'Belgrano', ref: 'CABA · Argentina' },
+];
+const TICKER_REPEAT = 3;
 
 export default function Home() {
   return (
@@ -173,52 +185,25 @@ export default function Home() {
         ══════════════════════════════════════════ */}
           <div className="route-ticker" aria-hidden="true">
             <div className="route-ticker-track">
-              {/* Grupo 1 — original */}
-              <div className="route-ticker-group">
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Guangzhou</span>
-                  <span className="ticker-ref">China</span>
+              {/* Dos grupos identicos (el segundo es el loop sin corte). Cada
+                  grupo repite las ciudades TICKER_REPEAT veces: con una sola
+                  pasada media ~1000px y en pantallas mas anchas se veia el
+                  final de la pista antes de que entrara la copia. */}
+              {[0, 1].map((group) => (
+                <div key={group} className="route-ticker-group">
+                  {Array.from({ length: TICKER_REPEAT }).flatMap((_, rep) =>
+                    TICKER_CITIES.map((c) => (
+                      <Fragment key={`${rep}-${c.city}`}>
+                        <div className="route-ticker-item">
+                          <span className="ticker-city">{c.city}</span>
+                          <span className="ticker-ref">{c.ref}</span>
+                        </div>
+                        <span className="route-ticker-sep" />
+                      </Fragment>
+                    )),
+                  )}
                 </div>
-                <span className="route-ticker-sep" />
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Miami</span>
-                  <span className="ticker-ref">Florida · USA</span>
-                </div>
-                <span className="route-ticker-sep" />
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Barcelona</span>
-                  <span className="ticker-ref">España</span>
-                </div>
-                <span className="route-ticker-sep" />
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Belgrano</span>
-                  <span className="ticker-ref">CABA · Argentina</span>
-                </div>
-                <span className="route-ticker-sep" />
-              </div>
-              {/* Grupo 2 — duplicado para el loop sin corte */}
-              <div className="route-ticker-group" aria-hidden="true">
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Guangzhou</span>
-                  <span className="ticker-ref">China</span>
-                </div>
-                <span className="route-ticker-sep" />
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Miami</span>
-                  <span className="ticker-ref">Florida · USA</span>
-                </div>
-                <span className="route-ticker-sep" />
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Barcelona</span>
-                  <span className="ticker-ref">España</span>
-                </div>
-                <span className="route-ticker-sep" />
-                <div className="route-ticker-item">
-                  <span className="ticker-city">Belgrano</span>
-                  <span className="ticker-ref">CABA · Argentina</span>
-                </div>
-                <span className="route-ticker-sep" />
-              </div>
+              ))}
             </div>
           </div>
 
