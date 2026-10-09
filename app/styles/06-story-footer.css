@@ -159,10 +159,20 @@
 }
 
 .footer-credit-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  vertical-align: middle;
   font-size: 13px;
   font-weight: 700;
   color: #4c8dff;
   letter-spacing: 0.02em;
+}
+
+/* Decorative (alt=""): the name next to it already says who it is. */
+.footer-credit-logo {
+  width: auto;
+  height: 16px;
 }
 
 .footer-contact {

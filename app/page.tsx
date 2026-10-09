@@ -458,7 +458,10 @@ export default function Home() {
           className="footer-credit"
         >
           <span className="footer-credit-label">Desarrollado por</span>{' '}
-          <span className="footer-credit-brand">KEI Software</span>
+          <span className="footer-credit-brand">
+            <Image src="/images/kei-logo.webp" alt="" width={44} height={64} className="footer-credit-logo" />
+            KEI Software
+          </span>
         </a>
       </footer>
 
