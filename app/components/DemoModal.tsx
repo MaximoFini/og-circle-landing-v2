@@ -42,6 +42,10 @@ export default function DemoModal({ defaultOpen = false }: { defaultOpen?: boole
   const [visible, setVisible] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
+  // Destino pendiente cuando el cierre viene de un CTA interno (ver
+  // `navigate`): reemplaza la devolucion de foco al disparador, que si no
+  // arrastraba el scroll de vuelta a la calculadora.
+  const navTargetRef = useRef<string | null>(null);
 
   const close = useCallback(() => {
     setVisible(false);
@@ -57,6 +61,14 @@ export default function DemoModal({ defaultOpen = false }: { defaultOpen?: boole
       setTimeout(() => setOpen(false), 280);
     }
   }, []);
+
+  const navigate = useCallback(
+    (hash: string) => {
+      navTargetRef.current = hash;
+      close();
+    },
+    [close],
+  );
 
   // Apertura por evento global.
   useEffect(() => {
@@ -98,8 +110,10 @@ export default function DemoModal({ defaultOpen = false }: { defaultOpen?: boole
 
     const dialog = dialogRef.current;
     const focusFirst = () => {
-      const focusable = dialog?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
-      (focusable && focusable[0] ? focusable[0] : dialog)?.focus();
+      const focusable = Array.from(dialog?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).filter(
+        (el) => !el.closest('[inert]'),
+      );
+      (focusable[0] ?? dialog)?.focus();
     };
     focusFirst();
 
@@ -111,8 +125,10 @@ export default function DemoModal({ defaultOpen = false }: { defaultOpen?: boole
       }
       if (e.key !== 'Tab' || !dialog) return;
 
+      // `closest('[inert]')`: la vista previa bloqueada de DemoFlow deja los
+      // controles en el DOM pero inertes; contarlos rompería el ciclo del trap.
       const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-        (el) => el.offsetParent !== null,
+        (el) => el.offsetParent !== null && !el.closest('[inert]'),
       );
       if (focusable.length === 0) return;
 
@@ -133,7 +149,19 @@ export default function DemoModal({ defaultOpen = false }: { defaultOpen?: boole
     return () => {
       document.body.style.overflow = prevOverflow;
       document.removeEventListener('keydown', onKeyDown);
-      // Foco de vuelta al disparador (boton "Probar Demo" o link "Demo" del nav).
+      const target = navTargetRef.current;
+      navTargetRef.current = null;
+      const el = target ? document.querySelector<HTMLElement>(target) : null;
+      if (el) {
+        // El overflow ya se restauro arriba, asi que el scroll aplica. El foco
+        // va al destino (sin scroll propio) para que el teclado siga desde ahi.
+        history.replaceState(null, '', target);
+        el.scrollIntoView({ block: 'start' });
+        if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+        el.focus({ preventScroll: true });
+        return;
+      }
+      // Foco de vuelta al disparador (boton "Ver simulador" o link "Demo" del nav).
       triggerRef.current?.focus?.();
     };
   }, [open, close]);
@@ -166,7 +194,7 @@ export default function DemoModal({ defaultOpen = false }: { defaultOpen?: boole
         <button type="button" className="vg-demo-modal-close" onClick={close} aria-label="Cerrar simulador">
           <X size={20} />
         </button>
-        <DemoFlow onClose={close} />
+        <DemoFlow onClose={close} onNavigate={navigate} />
       </div>
     </div>,
     document.body,

@@ -15,7 +15,7 @@ export default function CostCalculator() {
     <>
       <div id="calculadora" className="calc-demo-cta-row">
         <p className="calc-demo-intro">
-          Probá el simulador de costos real, gratis. Esto es apenas uno de los beneficios de <strong>OG Circle</strong>.
+          Mirá por dentro el simulador de costos. Es uno de los beneficios de <strong>OG Circle</strong>.
         </p>
 
         {/* Sin JS, cae en un scroll benigno al propio bloque. Con JS, abre
@@ -28,9 +28,9 @@ export default function CostCalculator() {
             window.dispatchEvent(new CustomEvent(OPEN_DEMO_EVENT));
           }}
         >
-          Probar Demo <ArrowRight size={14} />
+          Ver simulador <ArrowRight size={14} />
         </a>
-        <p className="calc-demo-microcopy">1 simulación gratis · sin registro</p>
+        <p className="calc-demo-microcopy">Vista previa · completo dentro de OG Circle</p>
       </div>
 
       <DemoModal />

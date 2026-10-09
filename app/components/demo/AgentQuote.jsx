@@ -45,10 +45,26 @@ function toRecord(x) {
   }
 }
 
-export default function AgentQuote({ onClose }) {
+// Vista previa bloqueada (DemoFlow.jsx): el flujo entero ya resuelto con un
+// caso de ejemplo, para que se vean todas las etapas. Los números son de
+// muestra y se renderizan borrosos; nunca se llama a la IA ni al TC real.
+const PREVIEW = {
+  producto: 'Auriculares bluetooth',
+  form: { fob: '1200', pesoKg: '18', unidades: '100', largo: '50', ancho: '40', alto: '35', cajas: '2', dolarBN: '1500' },
+  selected: { sim: '8518.30.00.900Z', descripcion: 'Auriculares, incluso combinados con micrófono', die: 20, te: 3, iva: 21 },
+  ai: { confianza: 92, alternativas: [] },
+  deposito: 'miami',
+}
+
+function previewResults() {
+  const { form, selected } = PREVIEW
+  return calcAllRoutes({ ...form, cajas: Number(form.cajas), die: selected.die, te: selected.te, iva: selected.iva })
+}
+
+export default function AgentQuote({ onClose, preview = false }) {
   const [regimen, setRegimen] = useState('general') // 'general' | 'pequeños' | 'integral'
-  const [producto, setProducto] = useState('')
-  const [form, setForm] = useState({
+  const [producto, setProducto] = useState(preview ? PREVIEW.producto : '')
+  const [form, setForm] = useState(preview ? PREVIEW.form : {
     fob: '',
     pesoKg: '',
     unidades: '',
@@ -58,28 +74,35 @@ export default function AgentQuote({ onClose }) {
     cajas: '1',
     dolarBN: '',
   })
-  const [deposito, setDeposito] = useState(null) // id de ruta elegida
+  const [deposito, setDeposito] = useState(preview ? PREVIEW.deposito : null) // id de ruta elegida
   const [dolarInfo, setDolarInfo] = useState(null)
 
   // Detección de NCM: siempre a pedido del usuario. El auto-debounce del
   // cotizador original disparaba la llamada de IA en cada pausa al tipear.
-  const [detStatus, setDetStatus] = useState('idle') // idle | detecting | done | error
+  const [detStatus, setDetStatus] = useState(preview ? 'done' : 'idle') // idle | detecting | done | error
   const [detError, setDetError] = useState('')
   const [cuota, setCuota] = useState(false) // 429: simulación gratis ya usada
-  const [ai, setAi] = useState(null)
-  const [selected, setSelected] = useState(null) // posición elegida
+  const [ai, setAi] = useState(preview ? PREVIEW.ai : null)
+  const [selected, setSelected] = useState(preview ? PREVIEW.selected : null) // posición elegida
   const runId = useRef(0)
 
-  const [results, setResults] = useState(null) // se genera al presionar COTIZAR
-  const [refNumber, setRefNumber] = useState('')
-  const [leadOk, setLeadOk] = useState(false)
+  const [results, setResults] = useState(preview ? previewResults : null) // se genera al presionar COTIZAR
+  const [refNumber, setRefNumber] = useState(preview ? 'VG-00000000-0000' : '')
+  const [leadOk, setLeadOk] = useState(preview)
   const [precioSugerido, setPrecioSugerido] = useState(null)
 
   const set = (field) => (e) =>
     setForm((s) => ({ ...s, [field]: e.target.value }))
 
   // Cambio de régimen: setea o limpia la NCM fija.
+  // En la vista previa el régimen nunca cambia y este reset de montaje
+  // borraría el caso de ejemplo.
+  const firstRegimen = useRef(true)
   useEffect(() => {
+    if (preview && firstRegimen.current) {
+      firstRegimen.current = false
+      return
+    }
     setResults(null)
     setCuota(false)
     if (regimen === 'pequeños') {
@@ -93,10 +116,11 @@ export default function AgentQuote({ onClose }) {
       setAi(null)
       setDetError('')
     }
-  }, [regimen])
+  }, [regimen, preview])
 
   // TC BNA automático al entrar (editable por si la fuente falla).
   useEffect(() => {
+    if (preview) return
     let alive = true
     getDolar()
       .then((d) => {
@@ -108,7 +132,7 @@ export default function AgentQuote({ onClose }) {
     return () => {
       alive = false
     }
-  }, [])
+  }, [preview])
 
   // Editar el producto invalida la NCM detectada: cotizar con la posición de
   // otro producto daría un número creíble y equivocado.
@@ -660,6 +684,7 @@ export default function AgentQuote({ onClose }) {
                 costoUnitario={costoPorUnidadARS != null ? Math.round(costoPorUnidadARS) : null}
                 precioSugerido={precioSugerido != null ? Math.round(precioSugerido) : null}
                 onLeadRequired={() => setLeadOk(false)}
+                preview={preview}
                 whatsappHref={waHref(whatsappText())}
               />
             ) : (

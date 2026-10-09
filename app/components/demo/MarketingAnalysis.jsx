@@ -12,11 +12,12 @@ export default function MarketingAnalysis({
   precioSugerido,
   onLeadRequired,
   whatsappHref,
+  preview = false,
 }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [cuota, setCuota] = useState(false)
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(preview ? PREVIEW_DATA : null)
   const [contexto, setContexto] = useState('')
 
   async function run() {
@@ -106,6 +107,17 @@ export default function MarketingAnalysis({
       )}
     </div>
   )
+}
+
+// Análisis de ejemplo para la vista previa bloqueada: se renderiza borroso,
+// solo tiene que ocupar el espacio de una respuesta real.
+const PREVIEW_DATA = {
+  publicoObjetivo: 'Jóvenes de 18 a 35 años que compran tecnología online y priorizan precio y envío rápido dentro del AMBA.',
+  angulosVenta: ['Mejor precio que en tiendas físicas', 'Garantía y soporte local', 'Envío en 24 horas'],
+  ideasContenido: ['Unboxing y prueba de sonido', 'Comparativa con marcas conocidas', 'Reseñas de clientes reales'],
+  campanaSugerida: 'Campaña en Instagram y Mercado Libre Ads con foco en precio de lanzamiento y cuotas sin interés.',
+  precioSugerido: 'Entre $24.000 y $29.000 por unidad según el canal.',
+  riesgoPrincipal: 'Competencia de precio con vendedores que importan por courier sin facturar.',
 }
 
 function Block({ title, children, full }) {

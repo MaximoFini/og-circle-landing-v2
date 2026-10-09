@@ -590,3 +590,111 @@
     text-align: center;
   }
 }
+
+/* ── Locked preview ──────────────────────────────────────────────────────
+   Client request: show the shape of the simulator but hide its inputs,
+   variables and rates. Only regime titles, step titles and depot names stay
+   legible; everything else is blurred. Interaction is cut with `inert` in
+   DemoFlow.jsx, not here. Blur is visual only: the text still ships in the
+   DOM and in the JS bundle. */
+.vg-demo-locked {
+  /* 9px: at 6px the large result figures (40px+) were still readable. */
+  --vg-lock-blur: 9px;
+  user-select: none;
+}
+
+.vg-demo-locked :is(
+  .regime-option__desc,
+  .card__subtitle,
+  .field,
+  label,
+  .btn,
+  .route-card__pais,
+  .route-card__unit,
+  .hint,
+  .alert,
+  .ncm-hit
+) {
+  filter: blur(var(--vg-lock-blur));
+}
+
+/* Result stages (breakdown, sales channels, marketing): same rule, only the
+   section titles stay legible. */
+.vg-demo-locked #agente-resultado .card > :not(.card__title),
+.vg-demo-locked .ps > :not(:first-child) {
+  filter: blur(var(--vg-lock-blur));
+}
+
+/* Sticky to the bottom of the modal's scroll box so the CTA stays in view
+   while the blurred form scrolls underneath. */
+.vg-demo-lock-panel {
+  position: sticky;
+  bottom: 16px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 16px 20px;
+  border: 1px solid rgba(217, 158, 0, 0.35);
+  border-radius: 14px;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  color: var(--gold);
+}
+
+.vg-demo-lock-panel p {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.vg-demo-lock-panel .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/* Phones: one compact row (text + button, no icon) so the sticky panel
+   doesn't eat a quarter of the screen over the preview. */
+@media (max-width: 640px) {
+  .vg-demo-lock-panel {
+    gap: 12px;
+    bottom: 12px;
+    padding: 12px 12px 12px 14px;
+  }
+
+  .vg-demo-lock-panel > svg {
+    display: none;
+  }
+
+  .vg-demo-lock-panel p {
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+
+  .vg-demo-lock-panel .btn {
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+}
+
+/* Narrow phones: side by side squeezed the text into four lines; stacking
+   keeps it to one line plus a full-width button. */
+@media (max-width: 400px) {
+  .vg-demo-lock-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .vg-demo-lock-panel .btn {
+    justify-content: center;
+  }
+}
