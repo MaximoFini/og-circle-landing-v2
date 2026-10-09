@@ -81,16 +81,6 @@
     transition: none;
   }
 
-  /* ── Hero numbers counter ──────────────────────────────────────────
-     NumbersBar.tsx already bails out early under this preference and
-     never mounts the observer: all three numbers sit at their final
-     value and never receive data-counted. This covers the other case —
-     the preference gets enabled mid-session while a flash is running. */
-  .num-card[data-counted]::after {
-    animation: none;
-    opacity: 0;
-  }
-
   /* ── Nav: progress thread and active section ───────────────────────
      The thread turns off entirely — it's the only moving nav piece, and
      leaving it stuck at an arbitrary value would be worse than not

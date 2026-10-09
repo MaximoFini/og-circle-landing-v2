@@ -467,13 +467,32 @@
 
 .hero-layer--numbers {
   width: 100%;
-  max-width: 780px;
+  /* 960px: four text pillars (was three numbers at 780px) need the room to
+     keep each label on at most two lines. */
+  max-width: 960px;
   margin-inline: auto;
   transform: translate3d(0, calc(var(--hsp) * -12px), 0);
   /* Stays fully opaque */
   opacity: 1;
   will-change: transform;
   backface-visibility: hidden;
+}
+
+/* Phones: lower the pillars toward the free space under the hero without
+   moving the h1. .hero-content centers its column, so the same amount goes
+   on the bar's margin and on the top padding. Scales with viewport height
+   and hits 0 around 560px tall, so short phones keep the original layout;
+   browsers without svh drop the declaration and stay at 0 too. */
+@media (max-width: 680px) {
+  .hero-content {
+    --pillars-drop: 0px;
+    --pillars-drop: clamp(0px, 20svh - 112px, 64px);
+    padding-top: calc(100px + var(--pillars-drop));
+  }
+
+  .hero-layer--numbers {
+    margin-top: var(--pillars-drop);
+  }
 }
 
 /* Progressive enhancement: where scroll timelines exist, --hsp is resolved

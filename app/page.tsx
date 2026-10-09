@@ -139,11 +139,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Plano 4 — numbers bar (el mas cercano)
-                B4 · el markup de los tres numeros se mudo a `NumbersBar.tsx`
-                porque el conteo cambia su texto y eso lo tiene que manejar
-                React. Es un componente cliente, pero sigue saliendo del server
-                con sus valores FINALES: sin JS se leen 6 / 3 / +5. */}
+            {/* Plano 4 — franja de pilares (el mas cercano). Markup estatico
+                en `NumbersBar.tsx`: sin cifras ni conteo, sale entero del server. */}
             <div className="hero-layer hero-layer--numbers">
               <NumbersBar />
             </div>
