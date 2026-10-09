@@ -47,6 +47,24 @@
   }
 }
 
+/* Tilt (TiltGrid + 17-tilt-lantern.css): stronger than the cards (8deg,
+   5% lift) since there's no card surface, plus the logo pops forward on Z
+   for depth. Z only applies while tilting: a resting 3D transform would
+   promote the layer and blur it. */
+.partners-grid > [data-tilt] {
+  --tilt-lift: 1.05;
+  transform-style: preserve-3d;
+  transition: transform var(--tilt-dur, 0.5s) var(--tilt-ease, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.partner-logo {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.partners-grid > [data-tilting] .partner-logo {
+  transform: translateZ(40px);
+}
+
 /* Phones keep the 2x2 grid: a single column stacked four tall logo blocks
    and the section ran longer than the content warranted. */
 @media (max-width: 480px) {

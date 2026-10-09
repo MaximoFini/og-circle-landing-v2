@@ -261,32 +261,32 @@ export default function Home() {
             <div className="wrap">
               <span className="tag-label">Partners</span>
               <h2 style={{ marginBottom: '32px' }}>Partners oficiales de OG Circle</h2>
-              <ul className="partners-grid">
-                <li className="partner-card">
+              <TiltGrid className="partners-grid" role="list" maxTilt={8}>
+                <div className="partner-card" role="listitem" data-tilt>
                   <div className="partner-logo">
                     <Image src="/images/partner-rebus.webp" alt="Rebus Group" width={587} height={181} sizes="(max-width: 560px) 60vw, 240px" />
                   </div>
                   <p className="partner-role">Cross-border financiero</p>
-                </li>
-                <li className="partner-card">
+                </div>
+                <div className="partner-card" role="listitem" data-tilt>
                   <div className="partner-logo">
                     <Image src="/images/partner-vegroup.webp" alt="VE Group" width={511} height={274} sizes="(max-width: 560px) 60vw, 240px" />
                   </div>
                   <p className="partner-role">Operador logístico</p>
-                </li>
-                <li className="partner-card">
+                </div>
+                <div className="partner-card" role="listitem" data-tilt>
                   <div className="partner-logo">
                     <Image src="/images/partner-belo.webp" alt="Belo" width={276} height={134} sizes="(max-width: 560px) 60vw, 240px" />
                   </div>
                   <p className="partner-role">Tarjeta global para pagos</p>
-                </li>
-                <li className="partner-card">
+                </div>
+                <div className="partner-card" role="listitem" data-tilt>
                   <div className="partner-logo">
                     <Image src="/images/partner-traxcargo.webp" alt="Traxcargo" width={447} height={163} sizes="(max-width: 560px) 60vw, 240px" />
                   </div>
                   <p className="partner-role">Sistema de trackeo internacional</p>
-                </li>
-              </ul>
+                </div>
+              </TiltGrid>
             </div>
           </section>
 

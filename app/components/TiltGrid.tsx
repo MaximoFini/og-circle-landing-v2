@@ -6,8 +6,9 @@ import type { ReactNode } from 'react';
 /**
  * A3 — Tilt con reflejo especular.
  *
- * Utilidad compartida por las tres grillas de tarjetas del sitio
- * (`.problems-grid-v2`, `.features-grid-v2`, `.prices-container`): envuelve la
+ * Utilidad compartida por las grillas de tarjetas del sitio
+ * (`.problems-grid-v2`, `.features-grid-v2`, `.prices-container`,
+ * `.partners-grid`): envuelve la
  * grilla y monta **un unico listener de `pointermove` delegado**, con throttle
  * por `requestAnimationFrame`. Nunca un listener por tarjeta.
  *
@@ -50,6 +51,8 @@ type Props = {
    * mismo fail-safe que `[data-reveal]` en los h2.
    */
   lantern?: boolean;
+  /** Rol ARIA de la grilla (p. ej. `list` en partners, que antes era un <ul>). */
+  role?: string;
 };
 
 export default function TiltGrid({
@@ -57,6 +60,7 @@ export default function TiltGrid({
   children,
   maxTilt = 5,
   lantern = false,
+  role,
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -178,7 +182,7 @@ export default function TiltGrid({
   }, [maxTilt, lantern]);
 
   return (
-    <div ref={rootRef} className={className}>
+    <div ref={rootRef} className={className} role={role}>
       {children}
     </div>
   );
