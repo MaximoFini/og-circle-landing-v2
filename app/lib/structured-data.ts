@@ -40,24 +40,14 @@ export function buildStructuredData() {
           name: 'VEGROUP',
           url: SITE_URL,
         },
-        offers: [
-          {
-            '@type': 'Offer',
-            name: 'Principiante',
-            price: '75000',
-            priceCurrency: 'ARS',
-            availability: 'https://schema.org/InStock',
-            url: `${SITE_URL}/#precios`,
-          },
-          {
-            '@type': 'Offer',
-            name: 'Avanzado',
-            price: '125000',
-            priceCurrency: 'ARS',
-            availability: 'https://schema.org/InStock',
-            url: `${SITE_URL}/#precios`,
-          },
-        ],
+        offers: {
+          '@type': 'Offer',
+          name: 'OG Circle — Acceso completo',
+          price: '225000',
+          priceCurrency: 'ARS',
+          availability: 'https://schema.org/InStock',
+          url: `${SITE_URL}/#precios`,
+        },
       },
     ],
   };

@@ -10,8 +10,8 @@ export const FAQS = [
     a: 'La estructura aduanera, las calculadoras de impuestos locales y los depósitos de retiro están diseñados específicamente para importadores que residen y comercializan dentro de Argentina.'
   },
   {
-    q: '¿Puedo empezar en Principiante y pasarme a Avanzado más adelante?',
-    a: 'Sí. Podés arrancar en el nivel Principiante y hacer el upgrade a Avanzado cuando quieras, abonando únicamente la diferencia entre ambos niveles más $10.000.'
+    q: '¿Qué incluye el pago único de $225.000?',
+    a: 'Todo OG Circle en un solo pago: la formación completa en video, la calculadora de costos, los depósitos en Guangzhou, Miami y Barcelona, el acceso a los agentes verificados en China, la red de profesionales, el tracking internacional, el grupo privado de importadores, el cross-border financiero y el flete con despacho gestionado por VeGroup.'
   },
   {
     q: '¿Necesito experiencia previa en comercio exterior para entender los cursos?',

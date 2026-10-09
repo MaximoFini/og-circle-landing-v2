@@ -348,12 +348,17 @@ export default function Home() {
               <h2 style={{ textAlign: 'center', marginBottom: '12px' }}>Pago único. Acceso de por vida.</h2>
 
               <TiltGrid className="prices-container">
-                {/* Principiante */}
-                <div className="price-card glass-card" data-tilt>
-                  <span className="price-tag">PRINCIPIANTE</span>
+                {/* Plan único. Mantiene el origen `landing-precios-avanzado` a propósito:
+                  la plataforma sólo acepta una lista cerrada de orígenes (ver
+                  lib/site.ts) y cualquier valor nuevo se guardaría como "otro". */}
+                {/* C2 — `.gradient-border`: unico elemento de la pagina que lo
+                  lleva hoy (regla: maximo DOS antes de que deje de leerse
+                  como jerarquia). Queda lugar para uno mas. */}
+                <div className="price-card glass-card featured gradient-border" data-tilt>
+                  <span className="price-tag">OG CIRCLE · ACCESO COMPLETO</span>
                   <div className="price-amount">
                     <span className="currency">$</span>
-                    <span className="num">75.000</span>
+                    <span className="num">225.000</span>
                   </div>
                   <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em' }}>
                     ARS
@@ -361,43 +366,19 @@ export default function Home() {
                   <ul className="price-features">
                     <li>Formación completa (11 videos)</li>
                     <li>Calculadora de costos en vivo</li>
-                    <li>Acceso a red de profesionales</li>
-                    <li>Soporte de servicios financieros básicos</li>
-                  </ul>
-                  <a href={registroHref('landing-precios-principiante')} className="price-cta liquid-glass" style={{ color: '#fff', display: 'block', textAlign: 'center', padding: '14px', borderRadius: '12px', fontWeight: 600, fontSize: '13px', letterSpacing: '0.06em' }}>
-                    Anotarme en Principiante
-                  </a>
-                </div>
-
-                {/* Avanzado */}
-                {/* C2 — `.gradient-border`: unico elemento de la pagina que lo
-                  lleva hoy (regla: maximo DOS antes de que deje de leerse
-                  como jerarquia). Queda lugar para uno mas. */}
-                <div className="price-card glass-card featured gradient-border" data-tilt>
-                  <span className="price-tag">AVANZADO · MÁS PEDIDO</span>
-                  <div className="price-amount">
-                    <span className="currency">$</span>
-                    <span className="num">125.000</span>
-                  </div>
-                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em' }}>
-                    ARS
-                  </div>
-                  <ul className="price-features">
-                    <li><strong>Todo lo de Principiante</strong></li>
-                    <li>Acceso a depósitos en Miami, China y España</li>
-                    <li>Agente de muestras y de volumen</li>
+                    <li>Casillero en depósitos de Guangzhou, Miami y Barcelona</li>
+                    <li>Acceso directo a nuestros 6 agentes verificados en China (muestras y volumen)</li>
+                    <li>Red de profesionales: despachantes, contadores y asesores</li>
+                    <li>Tracking internacional en tiempo real</li>
+                    <li>Grupo privado de importadores</li>
+                    <li>Cross-border financiero: cuenta cambiaria SWIFT y pagos a proveedores</li>
                     <li>Flete + despacho gestionado por VeGroup</li>
-                    <li>Tracking internacional & cuenta cambiaria SWIFT</li>
                   </ul>
                   <a href={registroHref('landing-precios-avanzado')} className="price-cta btn-gradient" style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, letterSpacing: '0.06em', color: '#050505' }}>
-                    Anotarme en Avanzado →
+                    Anotarme en OG Circle →
                   </a>
                 </div>
               </TiltGrid>
-
-              <p style={{ fontSize: '13px', textAlign: 'center', marginTop: '28px', color: 'rgba(255,255,255,0.3)' }}>
-                * Podés empezar en Principiante y hacer el upgrade a Avanzado abonando únicamente la diferencia + $10.000.
-              </p>
             </div>
           </section>
 

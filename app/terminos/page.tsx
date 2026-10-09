@@ -90,7 +90,7 @@ export default function TerminosPage() {
             <p>
               VeGroup <strong>no es un operador logístico, un despachante de aduana, ni una agencia de
               transporte internacional</strong>. VeGroup no realiza por sí misma el transporte, el despacho
-              aduanero ni la nacionalización de la mercadería: en el plan Avanzado, esas gestiones son
+              aduanero ni la nacionalización de la mercadería: dentro de OG Circle, esas gestiones son
               coordinadas por VeGroup a través de terceros profesionales y proveedores de su red (agentes de
               carga, despachantes matriculados, couriers), no ejecutadas directamente por VeGroup como
               transportista o aduana.
@@ -106,30 +106,20 @@ export default function TerminosPage() {
 
         <section id="s4">
           <h2>4. Planes, precios y forma de pago</h2>
-          <p>OG Circle se ofrece hoy en dos niveles, ambos de <strong>pago único</strong> (no es una suscripción) con <strong>acceso de por vida</strong> al contenido y beneficios del nivel adquirido:</p>
-          <h3>4.1. Principiante — $75.000 ARS (pago único)</h3>
+          <p>OG Circle se ofrece hoy en un único plan, de <strong>pago único</strong> (no es una suscripción) con <strong>acceso de por vida</strong> al contenido y beneficios incluidos:</p>
+          <h3>4.1. OG Circle — Acceso completo — $225.000 ARS (pago único)</h3>
           <ul>
             <li>Formación completa en video sobre el proceso de importación y armado de e-commerce.</li>
             <li>Acceso a la calculadora de costos.</li>
-            <li>Acceso a la red de profesionales de VeGroup.</li>
-            <li>Soporte financiero básico.</li>
-          </ul>
-          <h3>4.2. Avanzado — $125.000 ARS (pago único)</h3>
-          <p>Incluye todo lo del plan Principiante, más:</p>
-          <ul>
-            <li>Uso de depósitos propios de la red en Miami, China y España.</li>
-            <li>Agente de compras y agente de volumen.</li>
-            <li>Flete y despacho gestionado por VeGroup a través de su red de proveedores.</li>
+            <li>Casillero en los depósitos de la red en Guangzhou (China), Miami y Barcelona.</li>
+            <li>Acceso a los agentes de compra verificados en China (muestras y volumen).</li>
+            <li>Acceso a la red de profesionales de VeGroup (despachantes, contadores y asesores).</li>
             <li>Tracking internacional del envío.</li>
-            <li>Cuenta cambiaria con transferencias SWIFT.</li>
+            <li>Acceso al grupo privado de importadores.</li>
+            <li>Cross-border financiero: cuenta cambiaria con transferencias SWIFT y pagos a proveedores del exterior.</li>
+            <li>Flete y despacho gestionado por VeGroup a través de su red de proveedores.</li>
           </ul>
-          <h3>4.3. Upgrade de Principiante a Avanzado</h3>
-          <p>
-            Quien haya adquirido el plan Principiante puede pasar al plan Avanzado en cualquier momento,
-            abonando la diferencia de precio entre ambos planes vigente al momento del upgrade, más un cargo
-            adicional de <strong>$10.000 ARS</strong>.
-          </p>
-          <h3>4.4. Precios</h3>
+          <h3>4.2. Precios</h3>
           <p>
             Los precios están expresados en pesos argentinos (ARS), incluyen los impuestos aplicables salvo
             que se indique lo contrario, y pueden modificarse sin aviso previo hacia el futuro. El precio
@@ -144,7 +134,7 @@ export default function TerminosPage() {
             Actualmente el Sitio <strong>no cuenta con un checkout de pago automático</strong>. La compra de
             OG Circle se gestiona de forma directa por WhatsApp: al hacer clic en cualquiera de los botones de
             contacto/compra del Sitio, se abre una conversación de WhatsApp con el equipo de VeGroup, donde se
-            coordinan el plan elegido, la forma de pago y la confirmación de la operación.
+            coordinan la forma de pago y la confirmación de la operación.
           </p>
           <p>
             La compra se considera perfeccionada una vez que VeGroup confirma por ese medio la recepción del
@@ -156,8 +146,8 @@ export default function TerminosPage() {
         <section id="s6">
           <h2>6. Acceso, entrega y vigencia</h2>
           <p>
-            Una vez confirmada la compra, VeGroup habilita el acceso al contenido y beneficios del plan
-            adquirido dentro de un plazo razonable, que se comunica por WhatsApp al momento de la compra. El
+            Una vez confirmada la compra, VeGroup habilita el acceso al contenido y beneficios de OG Circle
+            dentro de un plazo razonable, que se comunica por WhatsApp al momento de la compra. El
             acceso al material de formación es <strong>de por vida</strong>, sujeto a que el Producto y sus
             plataformas asociadas sigan operativos.
           </p>
@@ -267,7 +257,7 @@ export default function TerminosPage() {
         <section id="s12">
           <h2>12. Terceros involucrados</h2>
           <p>
-            El plan Avanzado implica interactuar con proveedores y profesionales de la red de VeGroup
+            OG Circle implica interactuar con proveedores y profesionales de la red de VeGroup
             (agentes de compra, depósitos en Miami/China/España, agentes de flete y despacho, entidades que
             operan la cuenta cambiaria con transferencias SWIFT, entre otros). Esos terceros prestan sus
             servicios bajo sus propios términos, tarifas y responsabilidades, y no son empleados ni
