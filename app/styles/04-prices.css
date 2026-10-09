@@ -93,6 +93,88 @@
   text-align: center;
 }
 
+/* Value-stack content inside the card: same tokens as the rest of the card
+   (price-tag tracking, text-secondary body, amber accents), no new look. */
+.price-group-title {
+  margin: 12px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.price-group-title--center {
+  text-align: center;
+}
+
+.price-valued {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.price-valued li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.price-valued svg {
+  margin-top: 1px;
+  color: var(--accent-from);
+}
+
+.price-valued s,
+.price-total s {
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration-color: rgba(255, 255, 255, 0.55);
+}
+
+.price-total {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(217, 158, 0, 0.2);
+}
+
+.price-total span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.price-total s {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.price-fineprint {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.price-fineprint strong {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
 /* ── Disqualify list ─────────────────────── */
 .disqualify-list {
   margin-top: 32px;

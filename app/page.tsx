@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { ArrowRight, Users } from 'lucide-react';
+import { ArrowRight, BarChart3, BookOpen, Calculator, GraduationCap, Users } from 'lucide-react';
 import SiteHeader from './components/SiteHeader';
 import HeroParallax from './components/HeroParallax';
 import WhatsAppFloat from './components/WhatsAppFloat';
@@ -45,6 +45,14 @@ const TICKER_CITIES = [
   { city: 'Belgrano', ref: 'CABA · Argentina' },
 ];
 const TICKER_REPEAT = 3;
+
+// Card de precios: lo que se cobraria por separado (se muestra tachado).
+const PRICED_ITEMS = [
+  { Icon: BookOpen, label: 'Formación: Importaciones Courier y Marítimas', value: '$150.000' },
+  { Icon: Calculator, label: 'Calculadora de costos | 10.502 NCM + 33.025 posiciones SIM', value: '$600.000' },
+  { Icon: BarChart3, label: 'Sistema estratégico de ventas | Ángulos y orientación', value: '$75.000' },
+  { Icon: GraduationCap, label: 'Formación: E-commerce + ADS', value: '$75.000' },
+];
 
 export default function Home() {
   return (
@@ -224,7 +232,7 @@ export default function Home() {
           <section className="section-pad" id="pilares-servicio">
             <div className="wrap">
               <span className="tag-label">Infraestructura</span>
-              <h2 style={{ marginBottom: '16px' }}><span className="text-gradient">OG Circle</span>: lo que ponemos a tu disposición</h2>
+              <h2 style={{ marginBottom: '16px' }}><span className="text-gradient">OG Circle</span>: todo lo que ponemos a tu disposición</h2>
 
               <OGCircleFeatures />
 
@@ -345,20 +353,43 @@ export default function Home() {
                   <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em' }}>
                     ARS
                   </div>
-                  <ul className="price-features">
-                    <li>Formación completa (11 videos)</li>
-                    <li>Calculadora de costos en vivo</li>
-                    <li>Casillero en depósitos de Guangzhou, Miami y Barcelona</li>
-                    <li>Acceso directo a nuestros 6 agentes verificados en China (muestras y volumen)</li>
-                    <li>Red de profesionales: despachantes, contadores y asesores</li>
-                    <li>Tracking internacional en tiempo real</li>
-                    <li>Grupo privado de importadores</li>
-                    <li>Cross-border financiero: cuenta cambiaria SWIFT y pagos a proveedores</li>
-                    <li>Flete + despacho gestionado por VeGroup</li>
+                  {/* Ancla de valor: lo que se cobraria por separado, tachado,
+                    contra el precio real de arriba. */}
+                  <p className="price-group-title">Lo que tiene precio</p>
+                  <ul className="price-valued">
+                    {PRICED_ITEMS.map(({ Icon, label, value }) => (
+                      <li key={label}>
+                        <Icon size={16} aria-hidden="true" />
+                        <span>{label}</span>
+                        <s aria-label={`Valor ${value}`}>{value}</s>
+                      </li>
+                    ))}
                   </ul>
+                  <div className="price-total">
+                    <span>Valor total</span>
+                    <s aria-label="Valor total $900.000">$900.000</s>
+                  </div>
+
+                  <p className="price-group-title">Lo que no tiene precio, tiene valor</p>
+                  <ul className="price-features">
+                    <li>Red de profesionales y especialistas</li>
+                    <li>Agentes de compras y búsqueda de productos</li>
+                    <li>Logística internacional integrada | Aérea y marítima</li>
+                    <li>Depósitos para almacenamiento de cargas</li>
+                    <li>Cross-Border Financiero | Pagos SWIFT a China</li>
+                    <li>Acceso a comunidad y actualizaciones</li>
+                    <li>Soporte 24/7</li>
+                    <li>Clase grupal semanal</li>
+                  </ul>
+
+                  <p className="price-group-title price-group-title--center">Tu acceso hoy</p>
                   <a href={registroHref('landing-precios-avanzado')} className="price-cta btn-gradient" style={{ display: 'block', textAlign: 'center', padding: '14px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, letterSpacing: '0.06em', color: '#050505' }}>
                     Anotarme en OG Circle →
                   </a>
+                  <p className="price-fineprint">
+                    <strong>Precio por tiempo limitado</strong>
+                    <span>Pago único · Acceso de por vida</span>
+                  </p>
                 </div>
               </TiltGrid>
             </div>

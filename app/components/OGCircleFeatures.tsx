@@ -1,6 +1,19 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Calculator,
+  GraduationCap,
+  Handshake,
+  Landmark,
+  MessageSquareMore,
+  Plane,
+  Ship,
+  Users,
+  UsersRound,
+  Warehouse,
+  type LucideIcon,
+} from 'lucide-react';
 import TiltGrid from './TiltGrid';
 
 /**
@@ -36,16 +49,20 @@ import TiltGrid from './TiltGrid';
  * observer/rAF) — mismo criterio que ya usa el resto del sitio.
  */
 
-const FEATURES = [
-  { num: '01', cat: 'FORMACIÓN', title: 'Cursos Explicativos', body: 'Videos prácticos al grano que te muestran el paso a paso operativo exacto que corremos para importar semanalmente. Sin teoría vacía.' },
-  { num: '02', cat: 'VIABILIDAD', title: 'Calculadora de Costos', body: 'Simulador integrado para calcular aranceles, despacho y flete final puesto en CABA. Evaluás el margen antes de gastar un dólar.' },
-  { num: '03', cat: 'INFRAESTRUCTURA', title: 'Depósitos Propios', body: 'Casilleros asignados en nuestros centros logísticos de Guangzhou, Miami y Barcelona para recibir y consolidar tu carga.' },
-  { num: '04', cat: 'NEGOCIACIÓN', title: 'Agentes en China', body: 'Acceso directo vía WeChat a nuestros 6 agentes verificados. Control de calidad, negociación y compra de muestras.' },
-  { num: '05', cat: 'SOPORTE LOCAL', title: 'Red de Profesionales', body: 'Contacto directo con despachantes, contadores expertos en comercio exterior y asesores de automatización.' },
-  { num: '06', cat: 'LOGÍSTICA', title: 'Tracking en Tiempo Real', body: 'Monitoreo digital de tu mercadería consolidada, desde bodega hasta Belgrano, CABA.' },
-  { num: '07', cat: 'COMUNIDAD', title: 'Grupo Privado de Importadores', body: 'Networking real con todos los miembros de OG Circle, compartiendo proveedores, resolviendo consultas en tiempo real y consolidando pedidos.' },
-  { num: '08', cat: 'FINANZAS', title: 'Cross-border Financiero', body: 'Vías validadas para pagarles a tus proveedores en el exterior sin trabas cambiarias: cuentas multimoneda, tipo de cambio real y tiempos de acreditación que no te frenan la producción.' },
-] as const;
+// `icons`: uno o dos glifos de lucide (vectoriales, nitidos a cualquier
+// escala) dentro del recuadro dorado que reemplazo a la etiqueta de texto.
+// Dos glifos cuando la feature cubre dos cosas (flete aereo + maritimo,
+// comunidad + soporte).
+const FEATURES: ReadonlyArray<{ num: string; icons: LucideIcon[]; title: string; body: string }> = [
+  { num: '01', icons: [GraduationCap], title: 'Formación', body: 'Importaciones Courier y Marítimas. E-commerce y ADS. Videos prácticos, paso a paso.' },
+  { num: '02', icons: [Calculator], title: 'Calculadora de Costos', body: '10.502 NCM + 33.025 posiciones SIM. Estimá aranceles, despacho y costo final antes de comprar.' },
+  { num: '03', icons: [Warehouse], title: 'Infraestructura', body: 'Casilleros y depósitos en Guangzhou, Miami y Barcelona para recibir y consolidar cargas.' },
+  { num: '04', icons: [Handshake], title: 'Agentes en China', body: 'Acceso a 6 agentes verificados. Búsqueda de productos, muestras, negociación y control de calidad.' },
+  { num: '05', icons: [Users], title: 'Red de Profesionales', body: 'Contactos de despachantes, contadores y especialistas en comercio exterior.' },
+  { num: '06', icons: [Plane, Ship], title: 'Logística Internacional', body: 'Flete aéreo y marítimo gestionado por VeGroup, con seguimiento internacional.' },
+  { num: '07', icons: [MessageSquareMore, UsersRound], title: 'Comunidad y Soporte', body: 'Grupo privado de importadores, actualizaciones, soporte 24/7 y una clase grupal semanal.' },
+  { num: '08', icons: [Landmark], title: 'Cross-border Financiero', body: 'Herramientas y vías para gestionar pagos SWIFT a proveedores en China.' },
+];
 
 const TOTAL = FEATURES.length;
 const TOUR_DURATION_MS = 17000;
@@ -361,7 +378,11 @@ export default function OGCircleFeatures() {
             }}
           >
             <div className="feature-num-big">{f.num}</div>
-            <div className="feature-cat">{f.cat}</div>
+            <div className="feature-icon" aria-hidden="true">
+              {f.icons.map((Icon, k) => (
+                <Icon key={k} size={24} strokeWidth={1.5} />
+              ))}
+            </div>
             <h3 className="feature-title">{f.title}</h3>
             <p className="feature-body">{f.body}</p>
             <div className="feature-shine" aria-hidden="true" />

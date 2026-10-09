@@ -11,7 +11,7 @@ export const FAQS = [
   },
   {
     q: '¿Qué incluye el pago único de $225.000?',
-    a: 'Todo OG Circle en un solo pago: la formación completa en video, la calculadora de costos, los depósitos en Guangzhou, Miami y Barcelona, el acceso a los agentes verificados en China, la red de profesionales, el tracking internacional, el grupo privado de importadores, el cross-border financiero y el flete con despacho gestionado por VeGroup.'
+    a: 'Todo OG Circle en un solo pago: las formaciones en importaciones courier y marítimas y en e-commerce + ADS, la calculadora de costos (10.502 NCM y 33.025 posiciones SIM) y el sistema estratégico de ventas. Además, la red de profesionales y especialistas, los agentes de compras, la logística internacional aérea y marítima, los depósitos para almacenar tus cargas, el cross-border financiero para pagar a China por SWIFT, la comunidad con sus actualizaciones, soporte 24/7 y una clase grupal semanal.'
   },
   {
     q: '¿Necesito experiencia previa en comercio exterior para entender los cursos?',

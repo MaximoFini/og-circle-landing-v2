@@ -109,15 +109,18 @@ export default function TerminosPage() {
           <p>OG Circle se ofrece hoy en un único plan, de <strong>pago único</strong> (no es una suscripción) con <strong>acceso de por vida</strong> al contenido y beneficios incluidos:</p>
           <h3>4.1. OG Circle — Acceso completo — $225.000 ARS (pago único)</h3>
           <ul>
-            <li>Formación completa en video sobre el proceso de importación y armado de e-commerce.</li>
-            <li>Acceso a la calculadora de costos.</li>
-            <li>Casillero en los depósitos de la red en Guangzhou (China), Miami y Barcelona.</li>
-            <li>Acceso a los agentes de compra verificados en China (muestras y volumen).</li>
-            <li>Acceso a la red de profesionales de VeGroup (despachantes, contadores y asesores).</li>
-            <li>Tracking internacional del envío.</li>
-            <li>Acceso al grupo privado de importadores.</li>
-            <li>Cross-border financiero: cuenta cambiaria con transferencias SWIFT y pagos a proveedores del exterior.</li>
-            <li>Flete y despacho gestionado por VeGroup a través de su red de proveedores.</li>
+            <li>Formación en video sobre importaciones courier y marítimas.</li>
+            <li>Formación en video sobre e-commerce y publicidad digital (ADS).</li>
+            <li>Acceso a la calculadora de costos de importación (base de 10.502 posiciones NCM y 33.025 posiciones SIM).</li>
+            <li>Acceso al sistema estratégico de ventas (ángulos de venta y orientación comercial).</li>
+            <li>Acceso a la red de profesionales y especialistas de VeGroup.</li>
+            <li>Acceso a agentes de compras y búsqueda de productos.</li>
+            <li>Logística internacional integrada, aérea y marítima, coordinada por VeGroup a través de terceros de su red (ver sección 3).</li>
+            <li>Acceso a depósitos de la red para el almacenamiento de cargas.</li>
+            <li>Cross-border financiero: vías para pagos a proveedores en China mediante transferencias SWIFT.</li>
+            <li>Acceso a la comunidad de OG Circle y a sus actualizaciones.</li>
+            <li>Soporte 24/7.</li>
+            <li>Una clase grupal semanal.</li>
           </ul>
           <h3>4.2. Precios</h3>
           <p>
