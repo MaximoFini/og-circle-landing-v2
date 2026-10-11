@@ -24,6 +24,7 @@
    blocks (animation: none, etc.) must still win by source order against
    any animation this ported CSS brings in. */
 @import "./styles/21-demo.css";
+@import "./styles/25-feature-icon-motion.css";
 @import "./styles/20-reduced-motion.css";
 @import "./styles/22-legal.css";
 @import "./styles/23-error-pages.css";

@@ -1,19 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ComponentType } from 'react';
 import {
-  Calculator,
-  GraduationCap,
-  Handshake,
-  Landmark,
-  MessageSquareMore,
-  Plane,
-  Ship,
-  Users,
-  UsersRound,
-  Warehouse,
-  type LucideIcon,
-} from 'lucide-react';
+  CalculatorIcon,
+  CapIcon,
+  ChatIcon,
+  CommunityIcon,
+  HandshakeIcon,
+  LandmarkIcon,
+  PlaneIcon as PlaneGlyph,
+  ShipIcon,
+  UsersIcon,
+  WarehouseIcon,
+} from './FeatureIcons';
 import TiltGrid from './TiltGrid';
 
 /**
@@ -49,19 +48,19 @@ import TiltGrid from './TiltGrid';
  * observer/rAF) — mismo criterio que ya usa el resto del sitio.
  */
 
-// `icons`: uno o dos glifos de lucide (vectoriales, nitidos a cualquier
-// escala) dentro del recuadro dorado que reemplazo a la etiqueta de texto.
-// Dos glifos cuando la feature cubre dos cosas (flete aereo + maritimo,
-// comunidad + soporte).
-const FEATURES: ReadonlyArray<{ num: string; icons: LucideIcon[]; title: string; body: string }> = [
-  { num: '01', icons: [GraduationCap], title: 'Formación', body: 'Importaciones Courier y Marítimas. E-commerce y ADS. Videos prácticos, paso a paso.' },
-  { num: '02', icons: [Calculator], title: 'Calculadora de Costos', body: '10.502 NCM + 33.025 posiciones SIM. Estimá aranceles, despacho y costo final antes de comprar.' },
-  { num: '03', icons: [Warehouse], title: 'Infraestructura', body: 'Casilleros y depósitos en Guangzhou, Miami y Barcelona para recibir y consolidar cargas.' },
-  { num: '04', icons: [Handshake], title: 'Agentes de China verificados', body: 'Acceso a agentes verificados. Búsqueda de productos, muestras, negociación y control de calidad.' },
-  { num: '05', icons: [Users], title: 'Red de Profesionales', body: 'Contactos de despachantes, contadores y especialistas en comercio exterior.' },
-  { num: '06', icons: [Plane, Ship], title: 'Logística Internacional', body: 'Flete aéreo y marítimo gestionado por VeGroup, con seguimiento internacional.' },
-  { num: '07', icons: [MessageSquareMore, UsersRound], title: 'Comunidad y Soporte', body: 'Grupo privado de importadores, actualizaciones, soporte 24/7 y una clase grupal semanal.' },
-  { num: '08', icons: [Landmark], title: 'Cross-border Financiero', body: 'Herramientas y vías para gestionar pagos SWIFT a proveedores en China.' },
+// `icons`: uno o dos glifos (`FeatureIcons.tsx`: vectoriales, nitidos a
+// cualquier escala, con partes animables en hover) dentro del recuadro dorado
+// que reemplazo a la etiqueta de texto. Dos glifos cuando la feature cubre dos
+// cosas (flete aereo + maritimo, comunidad + soporte).
+const FEATURES: ReadonlyArray<{ num: string; icons: ComponentType[]; title: string; body: string }> = [
+  { num: '01', icons: [CapIcon], title: 'Formación', body: 'Importaciones Courier y Marítimas. E-commerce y ADS. Videos prácticos, paso a paso.' },
+  { num: '02', icons: [CalculatorIcon], title: 'Calculadora de Costos', body: '10.502 NCM + 33.025 posiciones SIM. Estimá aranceles, despacho y costo final antes de comprar.' },
+  { num: '03', icons: [WarehouseIcon], title: 'Infraestructura', body: 'Casilleros y depósitos en Guangzhou, Miami y Barcelona para recibir y consolidar cargas.' },
+  { num: '04', icons: [HandshakeIcon], title: 'Agentes de China verificados', body: 'Acceso a agentes verificados. Búsqueda de productos, muestras, negociación y control de calidad.' },
+  { num: '05', icons: [UsersIcon], title: 'Red de Profesionales', body: 'Contactos de despachantes, contadores y especialistas en comercio exterior.' },
+  { num: '06', icons: [PlaneGlyph, ShipIcon], title: 'Logística Internacional', body: 'Flete aéreo y marítimo gestionado por VeGroup, con seguimiento internacional.' },
+  { num: '07', icons: [ChatIcon, CommunityIcon], title: 'Comunidad y Soporte', body: 'Grupo privado de importadores, actualizaciones, soporte 24/7 y una clase grupal semanal.' },
+  { num: '08', icons: [LandmarkIcon], title: 'Cross-border Financiero', body: 'Herramientas y vías para gestionar pagos SWIFT a proveedores en China.' },
 ];
 
 const TOTAL = FEATURES.length;
@@ -380,7 +379,7 @@ export default function OGCircleFeatures() {
             <div className="feature-num-big">{f.num}</div>
             <div className="feature-icon" aria-hidden="true">
               {f.icons.map((Icon, k) => (
-                <Icon key={k} size={24} strokeWidth={1.5} />
+                <Icon key={k} />
               ))}
             </div>
             <h3 className="feature-title">{f.title}</h3>

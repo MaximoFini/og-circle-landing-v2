@@ -1,0 +1,174 @@
+/* ── Feature icon micro-animations ───────────
+   One short one-shot per glyph, played when the card is hovered (desktop) or
+   spotlighted (`data-og-active`: mobile scroll band, desktop tour). Parts are
+   the `.fi-*` groups in FeatureIcons.tsx. Without JS or under reduced motion
+   the glyphs just sit still. */
+.fi {
+  overflow: visible;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-cap-top {
+    animation: fi-cap-lift 0.8s ease-in-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-cap-tassel {
+    animation: fi-swing 0.9s ease-in-out 0.12s;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-calc-key {
+    animation: fi-press 0.38s ease-out var(--d, 0ms);
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-calc-screen {
+    animation: fi-screen 0.5s ease-in-out 0.62s;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-wh-slat--1 {
+    animation: fi-slat-1 1.1s ease-in-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-wh-slat--2 {
+    animation: fi-slat-2 1.1s ease-in-out;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-hs-left {
+    animation: fi-hand-left 0.8s ease-in-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-hs-right {
+    animation: fi-hand-right 0.8s ease-in-out;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-users-main {
+    animation: fi-hop 0.6s ease-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-users-side {
+    animation: fi-hop 0.6s ease-out 0.14s;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-plane {
+    animation: fi-fly 0.9s ease-in-out;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-ship-body {
+    animation: fi-rock 1s ease-in-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-ship-wave {
+    animation: fi-wave 1s ease-in-out;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-chat-bubble {
+    animation: fi-pop 0.5s ease-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-chat-dot {
+    animation: fi-hop-sm 0.5s ease-out var(--d, 0ms);
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-comm-main {
+    animation: fi-hop 0.6s ease-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-comm-side {
+    animation: fi-slide-in 0.7s ease-out 0.1s;
+  }
+
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-bank-roof {
+    animation: fi-roof 0.9s ease-in-out;
+  }
+  .feature-card-v2:is(:hover, [data-og-active]) .fi-bank-col {
+    animation: fi-rise 0.9s ease-out var(--d, 0ms);
+  }
+}
+
+@keyframes fi-cap-lift {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  35% { transform: translateY(-3.5px) rotate(-10deg); }
+  65% { transform: translateY(0.6px) rotate(3deg); }
+}
+
+@keyframes fi-swing {
+  0%, 100% { transform: rotate(0); }
+  30% { transform: rotate(28deg); }
+  55% { transform: rotate(-18deg); }
+  80% { transform: rotate(8deg); }
+}
+
+@keyframes fi-press {
+  0%, 100% { transform: scale(1) translateY(0); }
+  35% { transform: scale(0.45) translateY(0.7px); }
+  70% { transform: scale(1.25) translateY(0); }
+}
+
+@keyframes fi-screen {
+  0%, 100% { transform: scaleX(1); }
+  25% { transform: scaleX(0.2); }
+}
+
+@keyframes fi-slat-1 {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  45%, 70% { transform: translateY(-3px); opacity: 0; }
+}
+
+@keyframes fi-slat-2 {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  45%, 70% { transform: translateY(-4px); opacity: 0; }
+}
+
+@keyframes fi-hand-left {
+  0%, 100% { transform: translateX(0); }
+  28% { transform: translateX(-2.5px); }
+  60% { transform: translateX(0.8px); }
+}
+
+@keyframes fi-hand-right {
+  0%, 100% { transform: translateX(0); }
+  28% { transform: translateX(2.5px); }
+  60% { transform: translateX(-0.8px); }
+}
+
+@keyframes fi-hop {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-1.8px); }
+}
+
+@keyframes fi-hop-sm {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-2.2px); }
+}
+
+@keyframes fi-fly {
+  0%, 100% { transform: translate(0, 0); opacity: 1; }
+  45% { transform: translate(7px, -7px); opacity: 0; }
+  46% { transform: translate(-7px, 7px); opacity: 0; }
+}
+
+@keyframes fi-rock {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-6deg); }
+  60% { transform: rotate(6deg); }
+  85% { transform: rotate(-3deg); }
+}
+
+@keyframes fi-wave {
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-1.2px); }
+  70% { transform: translateX(1.2px); }
+}
+
+@keyframes fi-pop {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.07); }
+}
+
+@keyframes fi-slide-in {
+  0%, 100% { transform: translateX(0); opacity: 1; }
+  20% { transform: translateX(2px); opacity: 0; }
+}
+
+@keyframes fi-roof {
+  0%, 100% { transform: translateY(0); }
+  15% { transform: translateY(-2.5px); }
+  60% { transform: translateY(0.5px); }
+}
+
+@keyframes fi-rise {
+  0%, 100% { transform: scaleY(1); }
+  12% { transform: scaleY(0.1); }
+  55% { transform: scaleY(1.08); }
+}
