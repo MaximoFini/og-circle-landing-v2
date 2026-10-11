@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { ArrowRight, BarChart3, BookOpen, Calculator, GraduationCap, Users } from 'lucide-react';
+import { ArrowRight, BarChart3, BookOpen, Calculator, GraduationCap } from 'lucide-react';
 import SiteHeader from './components/SiteHeader';
 import HeroParallax from './components/HeroParallax';
 import WhatsAppFloat from './components/WhatsAppFloat';
@@ -294,11 +294,15 @@ export default function Home() {
                   </p>
                   <StoryCollapse />
                 </div>
-                <div className="founder-photo-placeholder">
-                  <Users size={32} style={{ color: 'var(--accent-from)', opacity: 0.7 }} aria-hidden="true" />
-                  <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>
-                    Foto de los fundadores
-                  </span>
+                <div className="founder-photos">
+                  <figure className="founder-figure">
+                    <Image src="/images/founder-1.webp" alt="Joaquín Vera, fundador de VeGroup" width={640} height={800} sizes="(max-width: 560px) 45vw, 320px" className="founder-photo" />
+                    <figcaption>Joaquín Vera</figcaption>
+                  </figure>
+                  <figure className="founder-figure">
+                    <Image src="/images/founder-2.webp" alt="Emiliano Vera, fundador de VeGroup" width={640} height={800} sizes="(max-width: 560px) 45vw, 320px" className="founder-photo" />
+                    <figcaption>Emiliano Vera</figcaption>
+                  </figure>
                 </div>
               </div>
             </div>

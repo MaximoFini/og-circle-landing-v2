@@ -222,23 +222,40 @@
 /* ── Founder Grid ────────────────────────── */
 .founder-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr 1fr;
   gap: clamp(32px, 5vw, 64px);
   align-items: center;
 }
 
-.founder-photo-placeholder {
-  aspect-ratio: 4 / 5;
-  width: 100%;
-  border-radius: 20px;
-  border: 1px dashed var(--glass-border-active);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
+/* Both photos are cropped to the same 4:5 frame and head scale so they read
+   as a pair. */
+.founder-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 1.6vw, 18px);
+}
+
+.founder-figure {
+  margin: 0;
+}
+
+.founder-figure figcaption {
+  margin-top: 10px;
   text-align: center;
-  padding: 24px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.founder-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border-active);
 }
 
 /* ── Responsive ──────────────────────────── */
@@ -256,8 +273,8 @@
     grid-template-columns: 1fr;
   }
 
-  .founder-photo-placeholder {
-    max-width: 340px;
+  .founder-photos {
+    max-width: 480px;
     margin-inline: auto;
     order: -1;
   }
