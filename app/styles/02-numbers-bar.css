@@ -1,5 +1,5 @@
 /* ── Hero pillars bar ────────────────────────
-   Four text pillars, no figures. Bold Helvetica (the h1's face) with the
+   Five text pillars, no figures. Bold Helvetica (the h1's face) with the
    pillar's keyword in amber on its own line and the rest in white below.
    Serif, Montserrat caps, Inter light and mono were tried and rejected. */
 .numbers-bar {
@@ -7,7 +7,7 @@
   margin: 48px 0 0;
   padding: 36px 0 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid var(--glass-border);
 }
 
@@ -51,6 +51,11 @@
   /* 2x2: only the right column keeps a divider. */
   .num-card:nth-child(odd) {
     border-left: 0;
+  }
+
+  /* Odd pillar count: the last one centers across both columns. */
+  .num-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 
   .num-card .label {

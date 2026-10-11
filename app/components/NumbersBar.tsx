@@ -17,8 +17,9 @@
 const PILLARS = [
   { key: 'Agentes chinos', rest: 'de compra' },
   { key: 'Depósitos', rest: 'de almacenaje' },
-  { key: 'Logística', rest: '' },
+  { key: 'Logística', rest: 'internacional integrada' },
   { key: 'Profesionales', rest: 'al servicio' },
+  { key: 'Formación', rest: 'paso a paso' },
 ];
 
 export default function NumbersBar() {
